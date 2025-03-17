@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Kepler's Third Law Simulator</title>
+  <style>
+    #orbitCanvas {
+      border: 1px solid #ccc;
+      background: #eee;
+      display: block;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simulador da Terceira Lei de Kepler</h1>
+  <label for="axis">Semi-eixo maior (U.A.):</label>
+  <input id="axis" type="number" value="1" step="0.1">
+  <button onclick="startSimulation()">Iniciar Simulação</button>
+  <div id="output" style="margin-top:10px;"></div>
+  <canvas id="orbitCanvas" width="400" height="400"></canvas>
+
+  <script>
+    let animationId;
+    function startSimulation() {
+      const a = parseFloat(document.getElementById('axis').value);
+      const T = Math.sqrt(a ** 3);
+      document.getElementById('output').innerText = 'Período Orbital: ' + T.toFixed(2) + ' anos';
+      cancelAnimationFrame(animationId);
+      animateOrbit(a, T);
+    }
+
+    function animateOrbit(a, T) {
+      const canvas = document.getElementById('orbitCanvas');
+      const ctx = canvas.getContext('2d');
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      let angle = 0;
+      const speed = (2 * Math.PI) / (T * 60);
+
+      (function drawFrame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Desenha a "estrela" no centro
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+        ctx.fillStyle = 'yellow';
+        ctx.fill();
+        // Desenha o planeta
+        const orbitRadius = 80 * a;
+        const x = centerX + orbitRadius * Math.cos(angle);
+        const y = centerY + orbitRadius * Math.sin(angle);
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = 'blue';
+        ctx.fill();
+        angle += speed;
+        animationId = requestAnimationFrame(drawFrame);
+      })();
+    }
+  </script>
+</body>
+</html>
