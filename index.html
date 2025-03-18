@@ -478,10 +478,106 @@
             color: #72ffda;
             text-decoration: underline;
         }
+
+        /* Estilos para a seção histórica */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: #64ffda;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-date {
+            color: #64ffda;
+            font-weight: bold;
+        }
+
+        .historical-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .historical-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+        }
+
+        .quote-container {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #64ffda;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quote-container:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(10px);
+        }
+
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .quote-author {
+            color: #64ffda;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
     <h1>Simulador das Leis de Kepler</h1>
+
+    <div style="position: absolute; top: 20px; right: 20px;">
+        <a href="historia.html" class="nav-button" style="text-decoration: none;">Contexto Histórico</a>
+        <a href="experimentos.html" class="nav-button" style="text-decoration: none;">Experimentos</a>
+    </div>
     
     <div class="main-formula">
         T² = a³
@@ -547,6 +643,7 @@
                 <div class="tab" onclick="changeTab(event, 'first-law')">1ª Lei</div>
                 <div class="tab" onclick="changeTab(event, 'second-law')">2ª Lei</div>
                 <div class="tab" onclick="changeTab(event, 'third-law')">3ª Lei</div>
+                <div class="tab" onclick="changeTab(event, 'history')">História</div>
             </div>
             
             <div id="overview" class="tab-content active">
@@ -644,6 +741,61 @@
                     </ul>
                     
                     <p>Experimente aumentar o semi-eixo maior no simulador e observe como o período orbital aumenta!</p>
+                </div>
+            </div>
+
+            <div id="history" class="tab-content">
+                <h2>História das Leis de Kepler</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">1571</div>
+                            <h3>Nascimento de Johannes Kepler</h3>
+                            <p>Nascido em Weil der Stadt, Alemanha, em uma família humilde.</p>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Johannes_Kepler_1610.jpg" 
+                                 alt="Johannes Kepler" 
+                                 class="historical-image"
+                                 onclick="showImageInfo(this, 'Retrato de Johannes Kepler de 1610')">
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">1600</div>
+                            <h3>Encontro com Tycho Brahe</h3>
+                            <p>Kepler torna-se assistente de Tycho Brahe em Praga, ganhando acesso a décadas de observações precisas.</p>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Tycho_Brahe.JPG" 
+                                 alt="Tycho Brahe" 
+                                 class="historical-image"
+                                 onclick="showImageInfo(this, 'Retrato de Tycho Brahe')">
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">1609</div>
+                            <h3>Publicação das Duas Primeiras Leis</h3>
+                            <p>Kepler publica "Astronomia Nova", apresentando suas duas primeiras leis do movimento planetário.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">1619</div>
+                            <h3>Terceira Lei</h3>
+                            <p>Publicação de "Harmonices Mundi", contendo a terceira lei do movimento planetário.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quote-container" onclick="revealQuoteContext(this)">
+                    <div class="quote-text">"Eu penso os Teus pensamentos após Ti, ó Deus."</div>
+                    <div class="quote-author">- Johannes Kepler</div>
+                    <div class="quote-context" style="display: none;">
+                        Esta famosa citação reflete a crença de Kepler de que as leis matemáticas que ele descobriu eram 
+                        a manifestação do plano divino do universo.
+                    </div>
                 </div>
             </div>
         </div>
@@ -1307,79 +1459,8 @@
 
         // Modificar a parte que controla os setores no loop de animação
         if (showSecondLaw) {
-            const currentTime = Date.now();
-            
-            // Adicionar novo ponto quando necessário e limitar a 3 setores
-            if (currentTime >= nextSectorTime && sectorPoints.length <= 2) {
-                sectorPoints.push({
-                    x: x,
-                    y: y,
-                    angle: trueAnomaly,
-                    startTime: currentTime
-                });
-                
-                nextSectorTime = currentTime + fixedTimeInterval;
-                updateAreaTable(); // Atualizar tabela após adicionar novo ponto
-            }
-            
-            // Resetar após 2 setores completos (3 pontos)
-            if (sectorPoints.length > 2 && currentTime > nextSectorTime) {
-                sectorPoints = [];
-                nextSectorTime = currentTime;
-            }
-        }
-        
-        // Iniciar simulação quando a página carregar
-        window.onload = function() {
-            generateStars(100); // Gerar 100 estrelas
-            startSimulation();
-            const infoElement = document.querySelector('.info');
-            console.log('Altura da caixa de informações:', infoElement.offsetHeight + 'px');
-        };
-
-        function calculateEllipticalArea(theta1, theta2, a, b) {
-            // Normaliza os ângulos para o intervalo [0, 2π]
-            theta1 = normalizeAngle(theta1);
-            theta2 = normalizeAngle(theta2);
-            
-            // Ajusta para rotação horária e garante θ2 > θ1
-            if (theta2 <= theta1) {
-                theta2 += 2 * Math.PI;
-            }
-            
-            // Área do setor elíptico = (ab/2) * (θ2 - θ1)
-            return (a * b * Math.abs(theta2 - theta1)) / 2;
-        }
-
-        function normalizeAngle(angle) {
-            // Normaliza o ângulo para o intervalo [0, 2π]
-            angle = angle % (2 * Math.PI);
-            return angle < 0 ? angle + 2 * Math.PI : angle;
-        }
-
-        function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
-            // Converte coordenadas para ângulos em relação ao centro da elipse
-            const cx = fx + (a * e); // Centro da elipse
-            const cy = fy;
-            
-            // Converte pontos para ângulos em relação ao centro
-            let theta1 = Math.atan2(y1 - cy, x1 - cx);
-            let theta2 = Math.atan2(y2 - cy, x2 - cx);
-            
-            // Normaliza os ângulos e ajusta para rotação horária
-            theta1 = -normalizeAngle(theta1);
-            theta2 = -normalizeAngle(theta2);
-            
-            // Calcula a área usando a função específica para elipse
-            const area = calculateEllipticalArea(theta1, theta2, scaledA, scaledB);
-            
-            return Math.abs(area);
-        }
-
-        // Modifique a parte que atualiza os setores para usar o novo cálculo
-        if (showSecondLaw) {
             // ...existing code...
-            if (currentTime >= nextSectorTime && sectorPoints.length < 2) {
+            if (currentTime >= nextSectorTime && sectorPoints.length <= 2) {
                 if (sectorPoints.length > 0) {
                     const prevPoint = sectorPoints[sectorPoints.length - 1];
                     const area = calculateSectorArea(
@@ -1462,6 +1543,59 @@
             
             areaInfoDiv.innerHTML += sectorInfo;
         }
+
+        // Adicionar função para animação da linha do tempo
+        function checkTimelineItems() {
+            const items = document.querySelectorAll('.timeline-item');
+            items.forEach(item => {
+                const position = item.getBoundingClientRect();
+                if(position.top < window.innerHeight - 100) {
+                    item.classList.add('visible');
+                }
+            });
+        }
+
+        // Função para mostrar informações da imagem
+        function showImageInfo(img, info) {
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.background = 'rgba(10, 25, 47, 0.95)';
+            modal.style.padding = '20px';
+            modal.style.borderRadius = '8px';
+            modal.style.zIndex = '1000';
+            modal.style.maxWidth = '80%';
+            modal.style.border = '1px solid #64ffda';
+            modal.innerHTML = `
+                <img src="${img.src}" style="max-width: 100%; margin-bottom: 10px;">
+                <p style="color: #fff;">${info}</p>
+                <button onclick="this.parentElement.remove()" 
+                        style="background: #64ffda; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                    Fechar
+                </button>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Função para revelar contexto da citação
+        function revealQuoteContext(container) {
+            const context = container.querySelector('.quote-context');
+            if(context.style.display === 'none') {
+                context.style.display = 'block';
+                context.style.animation = 'fadeIn 0.5s ease';
+            } else {
+                context.style.display = 'none';
+            }
+        }
+
+        // Adicionar event listeners
+        window.addEventListener('scroll', checkTimelineItems);
+        window.addEventListener('load', () => {
+            checkTimelineItems();
+            // ...existing code...
+        });
     </script>
 
     <!-- Footer com Créditos -->

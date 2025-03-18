@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimentos - Leis de Kepler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0a192f 0%, #162744 100%);
+            color: #e6e6e6;
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: #64ffda;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .experiments-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .experiment-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .experiment-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            justify-content: center;
+        }
+
+        .tab-button {
+            padding: 15px 30px;
+            background: rgba(100, 255, 218, 0.1);
+            border: none;
+            color: #64ffda;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: rgba(100, 255, 218, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .experiment-content {
+            display: none;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            min-height: 600px;
+        }
+
+        .experiment-content.active {
+            display: grid;
+        }
+
+        .experiment-sidebar {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            height: fit-content;
+        }
+
+        .experiment-main {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .canvas-container {
+            flex: 1;
+            min-height: 500px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .canvas-container canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .slider-container input[type="range"] {
+            -webkit-appearance: none;
+            width: 300px;
+            height: 6px;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #64ffda;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .parameter-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #64ffda;
+            padding: 15px 20px;
+            margin: 8px;
+            min-width: 140px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+        }
+
+        .physics-info {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .instructions {
+            background: rgba(100, 255, 218, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .main-formula {
+            text-align: center;
+            font-size: 24px;
+            color: #64ffda;
+            padding: 15px;
+            background: rgba(100, 255, 218, 0.05);
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .parameters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px auto;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="index.html" class="nav-button">Simulador</a>
+        <a href="historia.html" class="nav-button">História</a>
+    </div>
+
+    <div class="experiments-container">
+        <div class="experiment-header">
+            <h1>Experimentos Interativos - Leis de Kepler</h1>
+            <div class="experiment-tabs">
+                <button class="tab-button active" onclick="switchExperiment('primeira-lei')">Primeira Lei</button>
+                <button class="tab-button" onclick="switchExperiment('segunda-lei')">Segunda Lei</button>
+                <button class="tab-button" onclick="switchExperiment('terceira-lei')">Terceira Lei</button>
+            </div>
+        </div>
+
+        <div id="primeira-lei" class="experiment-content active">
+            <div class="experiment-sidebar">
+                <div class="instructions">
+                    <h3>Primeira Lei de Kepler</h3>
+                    <p>Os planetas se movem em órbitas elípticas com o Sol em um dos focos.</p>
+                    <p>Ajuste os parâmetros para ver como a forma da órbita muda.</p>
+                </div>
+                
+                <div class="controls">
+                    <label for="axis1">Semi-eixo maior (U.A.):</label>
+                    <div class="slider-container">
+                        <span>0.5</span>
+                        <input id="axis1" type="range" min="0.5" max="5" value="1" step="0.1">
+                        <span>5.0</span>
+                    </div>
+                    <div class="parameter-box">
+                        <div>Valor atual:</div>
+                        <div id="axisValue1">1.0</div>
+                    </div>
+                    
+                    <label for="eccentricity1">Excentricidade:</label>
+                    <div class="slider-container">
+                        <span>0</span>
+                        <input id="eccentricity1" type="range" min="0" max="0.9" value="0.5" step="0.1">
+                        <span>0.9</span>
+                    </div>
+                    <div class="parameter-box">
+                        <div>Valor atual:</div>
+                        <div id="eccentricityValue1">0.5</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experiment-main">
+                <div class="canvas-container">
+                    <canvas id="ellipse-canvas"></canvas>
+                    <div id="physicsInfo1" class="physics-info">
+                        <div>Valores Instantâneos</div>
+                        <div class="parameter-box">
+                            <div>Velocidade:</div>
+                            <div id="velocityOutput1">0.0 UA/ano</div>
+                        </div>
+                        <div class="parameter-box">
+                            <div>Momento Angular:</div>
+                            <div id="angularMomentumOutput1">0.0 UA²/ano</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="segunda-lei" class="experiment-content">
+            <div class="experiment-sidebar">
+                <div class="instructions">
+                    <h3>Segunda Lei de Kepler</h3>
+                    <p>Os planetas varrem áreas iguais em tempos iguais.</p>
+                </div>
+                
+                <div class="controls">
+                    <label for="axis2">Semi-eixo maior (U.A.):</label>
+                    <div class="slider-container">
+                        <span>0.5</span>
+                        <input id="axis2" type="range" min="0.5" max="5" value="1" step="0.1">
+                        <span>5.0</span>
+                    </div>
+                    <div class="parameter-box">
+                        <div>Valor atual:</div>
+                        <div id="axisValue2">1.0</div>
+                    </div>
+                    
+                    <label for="eccentricity2">Excentricidade:</label>
+                    <div class="slider-container">
+                        <span>0</span>
+                        <input id="eccentricity2" type="range" min="0" max="0.9" value="0.5" step="0.1">
+                        <span>0.9</span>
+                    </div>
+                    <div class="parameter-box">
+                        <div>Valor atual:</div>
+                        <div id="eccentricityValue2">0.5</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experiment-main">
+                <div class="canvas-container">
+                    <canvas id="areas-canvas"></canvas>
+                    <div id="areaInfo" class="physics-info">
+                        <div>Áreas Varridas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="terceira-lei" class="experiment-content">
+            <div class="experiment-sidebar">
+                <div class="instructions">
+                    <h3>Terceira Lei de Kepler</h3>
+                    <p>O quadrado do período orbital é proporcional ao cubo do semi-eixo maior.</p>
+                </div>
+                
+                <div class="controls">
+                    <label for="axis3">Semi-eixo maior (U.A.):</label>
+                    <div class="slider-container">
+                        <span>0.5</span>
+                        <input id="axis3" type="range" min="0.5" max="5" value="1" step="0.1">
+                        <span>5.0</span>
+                    </div>
+                    <div class="parameter-box">
+                        <div>Valor atual:</div>
+                        <div id="axisValue3">1.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experiment-main">
+                <div class="canvas-container">
+                    <canvas id="period-canvas"></canvas>
+                    <div id="periodOutput" class="physics-info">
+                        <div>Período Orbital</div>
+                    </div>
+                </div>
+                <div class="main-formula">
+                    T² = a³
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let animationId;
+        const stars = [];
+        let sectorPoints = [];
+        let nextSectorTime = Date.now();
+        let showSecondLaw = false;
+        let startTime = Date.now();
+        let scale = 60;
+
+        function generateStars(count, canvas) {
+            stars.length = 0;
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5 + 0.5,
+                    opacity: Math.random() * 0.8 + 0.2
+                });
+            }
+        }
+
+        function drawVector(ctx, startX, startY, endX, endY, color, label) {
+            const angle = Math.atan2(endY - startY, endX - startX);
+            const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            const headLength = Math.min(15, length * 0.3);
+            const headAngle = Math.PI / 6;
+
+            // Desenhar linha principal
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Desenhar ponta da seta
+            ctx.beginPath();
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(
+                endX - headLength * Math.cos(angle - headAngle),
+                endY - headLength * Math.sin(angle - headAngle)
+            );
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(
+                endX - headLength * Math.cos(angle + headAngle),
+                endY - headLength * Math.sin(angle + headAngle)
+            );
+            ctx.stroke();
+
+            // Adicionar label
+            if (label) {
+                ctx.fillStyle = color;
+                ctx.font = '14px Arial';
+                ctx.fillText(label, endX + 5, endY + 5);
+            }
+        }
+
+        function drawOrbit(ctx, canvas, a, e, showVectors = false) {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const b = a * Math.sqrt(1 - e * e);
+            const scaledA = a * scale;
+            const scaledB = b * scale;
+            const c = a * e;
+            const scaledC = c * scale;
+            
+            // Ajustando os focos (agora Sol à direita)
+            const rightFocusX = centerX + scaledC; // Sol (foco direito)
+            const leftFocusX = centerX - scaledC; // Outro foco
+
+            // Limpar e desenhar fundo
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const star of stars) {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                ctx.fill();
+            }
+
+            // Desenhar órbita elíptica
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.ellipse(centerX, centerY, scaledA, scaledB, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            // Desenhar segundo foco (agora à esquerda)
+            ctx.beginPath();
+            ctx.arc(leftFocusX, centerY, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(255, 100, 100, 0.5)';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255, 100, 100, 0.8)';
+            ctx.stroke();
+
+            // Desenhar Sol no foco direito
+            ctx.beginPath();
+            ctx.arc(rightFocusX, centerY, 8, 0, 2 * Math.PI);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+
+            // Glow do Sol (agora à direita)
+            const gradient = ctx.createRadialGradient(
+                rightFocusX, centerY, 8,
+                rightFocusX, centerY, 16
+            );
+            gradient.addColorStop(0, 'rgba(255, 255, 150, 0.8)');
+            gradient.addColorStop(1, 'rgba(255, 255, 150, 0)');
+            ctx.beginPath();
+            ctx.arc(rightFocusX, centerY, 16, 0, 2 * Math.PI);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // Calcular posição do planeta usando a anomalia excêntrica
+            const elapsedTime = (Date.now() - startTime) / 1000;
+            const meanMotion = 2 * Math.PI / (a ** 1.5); // Terceira Lei de Kepler
+            const meanAnomaly = meanMotion * elapsedTime;
+            
+            // Resolver a equação de Kepler (E - e*sin(E) = M) usando método iterativo
+            let E = meanAnomaly;
+            for (let i = 0; i < 5; i++) {
+                E = E - (E - e * Math.sin(E) - meanAnomaly) / (1 - e * Math.cos(E));
+            }
+            
+            // Converter anomalia excêntrica para coordenadas cartesianas corretamente
+            const cosE = Math.cos(E);
+            const sinE = Math.sin(E);
+            
+            // Coordenadas corrigidas para alinhar com a elipse desenhada
+            const x = centerX + scaledA * cosE;
+            const y = centerY + scaledB * sinE;
+
+            // Desenhar planeta
+            ctx.beginPath();
+            ctx.arc(x, y, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = '#3498db';
+            ctx.fill();
+
+            if (showVectors) {
+                const dx = x - rightFocusX;
+                const dy = y - centerY;
+                const r = Math.sqrt(dx*dx + dy*dy) / scale; // Converter para UA real
+                
+                // Calcular momento angular (constante)
+                const L = Math.sqrt(a * (1 - e*e));
+                
+                // Velocidade a partir do momento angular
+                const speed = L/r;
+                
+                // Calcular componentes do vetor velocidade
+                const vx = -speed * dy / (r * scale); // Ajustar para escala da tela
+                const vy = speed * dx / (r * scale);
+                
+                // Ajustar o tamanho do vetor velocidade para visualização
+                const vectorScale = 5;
+                drawVector(ctx, x, y, x + vx/vectorScale, y + vy/vectorScale, '#4CAF50', 'v');
+                
+                // Vetor força gravitacional com escala reduzida
+                const forceMagnitude = 5 / (r * r); // Reduzido de 40 para 15
+                const forceX = -dx / r * forceMagnitude;
+                const forceY = -dy / r * forceMagnitude;
+                drawVector(ctx, x, y, x + forceX, y + forceY, '#FF4444', 'F');
+                
+                // Calcular velocidades máxima e mínima
+                const vmax = L/(a * (1 - e)); // Velocidade no periélio
+                const vmin = L/(a * (1 + e)); // Velocidade no afélio
+                
+                const velocityPercent = ((speed - vmin) / (vmax - vmin) * 100).toFixed(0);
+                const arrow = speed > L/a ? '↑' : '↓';
+                
+                // Atualizar valores instantâneos
+                document.getElementById('velocityOutput1').innerHTML = `
+                    <div>Atual: ${speed.toFixed(2)} UA/ano ${arrow}</div>
+                    <div style="font-size: 0.8em; color: #64ffda">
+                        Máx: ${vmax.toFixed(2)} UA/ano<br>
+                        Mín: ${vmin.toFixed(2)} UA/ano<br>
+                        (${velocityPercent}% do intervalo)
+                    </div>
+                `;
+                
+                document.getElementById('angularMomentumOutput1').innerHTML = `
+                    <div>${L.toFixed(2)} UA²/ano</div>
+                    <div style="font-size: 0.8em; color: #64ffda">(constante)</div>
+                `;
+            }
+
+            return { centerX, centerY, starX: rightFocusX, scaledA, scaledB, x, y };
+        }
+
+        function drawOrbitWithAreas(ctx, canvas, a, e, showAreas) {
+            const orbitData = drawOrbit(ctx, canvas, a, e, false); // false para não mostrar vetores
+            const currentTime = Date.now();
+            
+            if (showAreas && currentTime >= nextSectorTime && sectorPoints.length < 3) {
+                sectorPoints.push({
+                    x: orbitData.x,
+                    y: orbitData.y,
+                    time: currentTime
+                });
+                nextSectorTime = currentTime + 3000; // 3 segundos entre setores
+            }
+
+            // Desenhar setores
+            if (showAreas && sectorPoints.length > 0) {
+                const colors = ['rgba(255, 183, 77, 0.3)', 'rgba(100, 181, 246, 0.3)', 'rgba(240, 98, 146, 0.3)'];
+                
+                for (let i = 0; i < sectorPoints.length - 1; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(orbitData.starX, orbitData.centerY);
+                    ctx.lineTo(sectorPoints[i].x, sectorPoints[i].y);
+                    ctx.lineTo(sectorPoints[i + 1].x, sectorPoints[i + 1].y);
+                    ctx.closePath();
+                    ctx.fillStyle = colors[i];
+                    ctx.fill();
+                    ctx.strokeStyle = colors[i].replace('0.3', '1');
+                    ctx.stroke();
+                }
+            }
+
+            // Resetar setores após completar
+            if (sectorPoints.length >= 3 && currentTime > nextSectorTime) {
+                sectorPoints = [];
+                nextSectorTime = currentTime;
+            }
+        }
+
+        function drawOrbitWithPeriod(ctx, canvas, a, e, T) {
+            const orbitData = drawOrbit(ctx, canvas, a, e, false); // false para não mostrar vetores
+            
+            // Mostrar informação do período
+            ctx.fillStyle = '#64ffda';
+            ctx.font = '16px Poppins';
+            ctx.fillText(`Período: ${T.toFixed(2)} anos`, 20, 30);
+            ctx.fillText(`Semi-eixo maior: ${a.toFixed(2)} UA`, 20, 60);
+        }
+
+        function setupEllipseExperiment() {
+            const canvas = document.getElementById('ellipse-canvas');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            const ctx = canvas.getContext('2d');
+            generateStars(100, canvas);
+            startTime = Date.now(); // Resetar o tempo inicial
+            
+            const axis1 = document.getElementById('axis1');
+            const ecc1 = document.getElementById('eccentricity1');
+            const axisValue1 = document.getElementById('axisValue1');
+            const eccValue1 = document.getElementById('eccentricityValue1');
+            
+            axis1.addEventListener('input', function() {
+                axisValue1.textContent = parseFloat(this.value).toFixed(1);
+            });
+            
+            ecc1.addEventListener('input', function() {
+                eccValue1.textContent = parseFloat(this.value).toFixed(1);
+            });
+            
+            function animate() {
+                const a = parseFloat(axis1.value);
+                const e = parseFloat(ecc1.value);
+                drawOrbit(ctx, canvas, a, e, true);
+                animationId = requestAnimationFrame(animate);
+            }
+            
+            animate(); // Iniciar a animação
+        }
+
+        function setupAreasExperiment() {
+            const canvas = document.getElementById('areas-canvas');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            const ctx = canvas.getContext('2d');
+            generateStars(100, canvas);
+            showSecondLaw = true;
+            
+            function animate() {
+                const a = parseFloat(document.getElementById('axis2').value);
+                const e = parseFloat(document.getElementById('eccentricity2').value);
+                drawOrbitWithAreas(ctx, canvas, a, e, true);
+                animationId = requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        function setupPeriodExperiment() {
+            const canvas = document.getElementById('period-canvas');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            const ctx = canvas.getContext('2d');
+            generateStars(100, canvas);
+            
+            function animate() {
+                const a = parseFloat(document.getElementById('axis3').value);
+                const T = Math.sqrt(a ** 3);
+                drawOrbitWithPeriod(ctx, canvas, a, 0.5, T);
+                document.getElementById('periodOutput').innerHTML = `
+                    <div>Período orbital:</div>
+                    <div>${T.toFixed(2)} anos</div>
+                `;
+                animationId = requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        function switchExperiment(id) {
+            cancelAnimationFrame(animationId);
+            startTime = Date.now(); // Resetar o tempo ao trocar de experimento
+            document.querySelectorAll('.experiment-content').forEach(exp => {
+                exp.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(id).classList.add('active');
+            document.querySelector(`[onclick="switchExperiment('${id}')"]`).classList.add('active');
+
+            switch(id) {
+                case 'primeira-lei':
+                    setupEllipseExperiment();
+                    break;
+                case 'segunda-lei':
+                    setupAreasExperiment();
+                    break;
+                case 'terceira-lei':
+                    setupPeriodExperiment();
+                    break;
+            }
+        }
+
+        window.onload = () => {
+            setupEllipseExperiment();
+        };
+    </script>
+</body>
+</html>

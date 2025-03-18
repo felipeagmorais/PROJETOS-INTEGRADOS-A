@@ -1,0 +1,39 @@
+:root {
+    --primary-color: #64ffda;
+    --bg-dark: #0a192f;
+    --bg-lighter: #162744;
+    --text-light: #e6e6e6;
+    --accent-transparent: rgba(100,255,218,0.1);
+}
+
+/* Animações Globais */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px var(--primary-color); }
+    50% { box-shadow: 0 0 20px var(--primary-color); }
+    100% { box-shadow: 0 0 5px var(--primary-color); }
+}
+
+/* Estilos Base */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-lighter) 100%);
+    color: var(--text-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Elementos Interativos */
+.interactive-element {
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.interactive-element:hover {
+    transform: scale(1.05);
+    animation: glow 2s infinite;
+}

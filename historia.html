@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>História das Leis de Kepler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0a192f 0%, #162744 100%);
+            color: #e6e6e6;
+            line-height: 1.6;
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: #64ffda;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(100, 255, 218, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3em;
+            color: #64ffda;
+            margin-bottom: 20px;
+        }
+
+        .timeline {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: #64ffda;
+        }
+
+        .timeline-item {
+            width: 50%;
+            padding: 20px;
+            position: relative;
+            transform: translateX(-100px);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.visible {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .interactive-element {
+            background: rgba(100, 255, 218, 0.05);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-element:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .historical-image {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .historical-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+        }
+
+        .quiz-section {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .quiz-question {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(100, 255, 218, 0.05);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        .quiz-option.correct {
+            background: rgba(46, 213, 115, 0.2);
+        }
+
+        .quiz-option.wrong {
+            background: rgba(255, 71, 87, 0.2);
+        }
+
+        /* Novos estilos */
+        .parallax-header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-attachment: fixed;
+            background-image: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564');
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .parallax-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 25, 47, 0.8);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .gallery-3d {
+            perspective: 1000px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 50px 0;
+        }
+
+        .gallery-container {
+            transform-style: preserve-3d;
+            animation: rotate 30s infinite linear;
+        }
+
+        .gallery-item {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            transform-origin: center;
+            transition: all 0.5s ease;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        @keyframes rotate {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .interactive-map {
+            width: 100%;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #64ffda;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .map-point::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(100,255,218,0.3);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        .experiment-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 40px;
+        }
+
+        .experiment-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .experiment-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .quiz-option {
+            position: relative;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .quiz-option::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: rgba(100,255,218,0.1);
+            transition: width 0.3s ease;
+        }
+
+        .quiz-option:hover::before {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="index.html" class="nav-button">Simulador</a>
+        <a href="experimentos.html" class="nav-button">Experimentos</a>
+    </div>
+
+    <div class="parallax-header">
+        <div class="header-content">
+            <h1>A História das Leis de Kepler</h1>
+            <p>Uma jornada através do tempo e das descobertas que revolucionaram nossa compreensão do Sistema Solar</p>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="#64ffda">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1571 - Nascimento de Kepler</h2>
+                <p>Johannes Kepler nasce em Weil der Stadt, Alemanha, em uma família de classe média baixa.</p>
+                <div class="interactive-element" onclick="showDetail('early-life')">
+                    Clique para saber mais sobre a infância de Kepler
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1600 - Encontro com Tycho Brahe</h2>
+                <p>Kepler torna-se assistente de Tycho Brahe em Praga, ganhando acesso a décadas de observações precisas.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Tycho_Brahe.JPG" 
+                     alt="Tycho Brahe" 
+                     class="historical-image"
+                     onclick="showImageDetail(this)">
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1609 - Primeira e Segunda Leis</h2>
+                <p>Publicação da "Astronomia Nova", apresentando suas duas primeiras leis do movimento planetário.</p>
+                <div class="interactive-element" onclick="showLawDetails(1)">
+                    Explorar a Primeira Lei
+                </div>
+                <div class="interactive-element" onclick="showLawDetails(2)">
+                    Explorar a Segunda Lei
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1619 - Terceira Lei</h2>
+                <p>Publicação de "Harmonices Mundi", contendo a terceira lei do movimento planetário.</p>
+                <div class="interactive-element" onclick="showLawDetails(3)">
+                    Explorar a Terceira Lei
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-3d">
+        <div class="gallery-container">
+            <!-- As imagens serão adicionadas via JavaScript -->
+        </div>
+    </div>
+
+    <div class="interactive-map">
+        <!-- Pontos do mapa serão adicionados via JavaScript -->
+    </div>
+
+    <div class="experiment-section">
+        <div class="experiment-card" onclick="startExperiment('ellipse')">
+            <h3>Experimento Virtual: Órbitas Elípticas</h3>
+            <p>Desenhe uma elipse e descubra como Kepler chegou à sua primeira lei.</p>
+        </div>
+        <div class="experiment-card" onclick="startExperiment('area')">
+            <h3>Experimento Virtual: Lei das Áreas</h3>
+            <p>Visualize como a velocidade orbital varia ao longo da trajetória.</p>
+        </div>
+        <div class="experiment-card" onclick="startExperiment('harmony')">
+            <h3>Experimento Virtual: Harmonia dos Mundos</h3>
+            <p>Explore a relação matemática entre período orbital e distância.</p>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>Teste seus Conhecimentos</h2>
+        <div class="quiz-question">
+            <p>Qual foi a principal contribuição de Tycho Brahe para as descobertas de Kepler?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, true)">
+                Suas observações precisas dos movimentos planetários
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">
+                Sua teoria heliocêntrica do Sistema Solar
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">
+                Seus cálculos matemáticos sobre órbitas elípticas
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDetail(topic) {
+            const details = {
+                'early-life': `
+                    <h3>Primeiros Anos de Kepler</h3>
+                    <p>Apesar das dificuldades financeiras, Kepler demonstrou desde cedo um talento excepcional 
+                    para matemática e astronomia. Sua educação foi possível graças a uma bolsa de estudos 
+                    da Igreja Luterana para estudar no seminário de Maulbronn.</p>
+                `
+            };
+
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.background = 'rgba(10, 25, 47, 0.95)';
+            modal.style.padding = '30px';
+            modal.style.borderRadius = '10px';
+            modal.style.maxWidth = '600px';
+            modal.style.zIndex = '1000';
+            modal.innerHTML = details[topic] + '<button onclick="this.parentElement.remove()" style="margin-top: 20px;">Fechar</button>';
+            document.body.appendChild(modal);
+        }
+
+        function showLawDetails(lawNumber) {
+            const laws = {
+                1: "As órbitas dos planetas são elípticas, com o Sol em um dos focos.",
+                2: "Uma linha ligando um planeta ao Sol varre áreas iguais em tempos iguais.",
+                3: "O quadrado do período orbital é proporcional ao cubo do semi-eixo maior da órbita."
+            };
+
+            alert(`Lei ${lawNumber} de Kepler:\n\n${laws[lawNumber]}`);
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('wrong');
+            }
+        }
+
+        // Animação da linha do tempo
+        function checkTimelineItems() {
+            const items = document.querySelectorAll('.timeline-item');
+            items.forEach(item => {
+                const position = item.getBoundingClientRect();
+                if(position.top < window.innerHeight - 100) {
+                    item.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkTimelineItems);
+        window.addEventListener('load', checkTimelineItems);
+
+        // Adicionar galeria 3D
+        function createGallery() {
+            const images = [
+                'kepler.jpg',
+                'tycho.jpg',
+                'prague.jpg',
+                'rudolphine.jpg',
+                'astronomia-nova.jpg'
+            ];
+
+            const container = document.querySelector('.gallery-container');
+            const angleStep = (2 * Math.PI) / images.length;
+
+            images.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.style.transform = `rotateY(${index * angleStep}rad) translateZ(300px)`;
+                item.innerHTML = `<img src="images/${img}" alt="Historical image">`;
+                container.appendChild(item);
+            });
+        }
+
+        // Adicionar pontos no mapa
+        function createMapPoints() {
+            const points = [
+                { x: 30, y: 40, title: 'Weil der Stadt - Nascimento de Kepler' },
+                { x: 45, y: 35, title: 'Praga - Trabalho com Tycho Brahe' },
+                { x: 40, y: 50, title: 'Graz - Primeiras Teorias' }
+            ];
+
+            const map = document.querySelector('.interactive-map');
+            points.forEach(point => {
+                const dot = document.createElement('div');
+                dot.className = 'map-point';
+                dot.style.left = `${point.x}%`;
+                dot.style.top = `${point.y}%`;
+                dot.setAttribute('data-title', point.title);
+                dot.onclick = () => showMapInfo(point);
+                map.appendChild(dot);
+            });
+        }
+
+        // Função para experimentos virtuais
+        function startExperiment(type) {
+            // Implementar experimentos interativos aqui
+            console.log(`Starting experiment: ${type}`);
+        }
+
+        // Inicialização
+        window.addEventListener('load', () => {
+            createGallery();
+            createMapPoints();
+            // ...existing initialization code...
+        });
+    </script>
+</body>
+</html>
