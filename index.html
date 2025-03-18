@@ -595,23 +595,32 @@
             
             <div id="second-law" class="tab-content">
                 <div class="law-section">
-                    <h3 class="law-title">Segunda Lei de Kepler - Lei das Áreas Iguais</h3>
+                    <h3 class="law-title">Segunda Lei de Kepler - Lei das Áreas</h3>
                     <p>"Uma linha ligando um planeta ao Sol varre áreas iguais em tempos iguais."</p>
                     
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Kepler-second-law.svg/300px-Kepler-second-law.svg.png" 
-                         alt="Segunda Lei de Kepler" class="law-image">
-                    
-                    <p>Isto significa que:</p>
-                    <ul>
-                        <li>O planeta se move mais <strong>rápido</strong> quando está mais <strong>próximo</strong> do Sol</li>
-                        <li>O planeta se move mais <strong>devagar</strong> quando está mais <strong>distante</strong> do Sol</li>
-                        <li>Esta lei descreve a <strong>conservação do momento angular</strong> do planeta</li>
-                    </ul>
-                    
-                    <p>Observe no simulador como a velocidade do planeta (indicada pelo número e pela cauda) aumenta quando ele está mais próximo do Sol.</p>
+                    <div class="demo-container">
+                        <div class="demo-info">
+                            <h4>Demonstração Interativa</h4>
+                            <p>Observe como os setores coloridos têm a mesma área, mesmo que o tempo para percorrê-los seja igual:</p>
+                            <ul>
+                                <li>Setor laranja: próximo ao periélio (maior velocidade)</li>
+                                <li>Setor azul: região intermediária</li>
+                                <li>Setor rosa: próximo ao afélio (menor velocidade)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="law-explanation">
+                        <p>Esta lei é uma consequência da:</p>
+                        <ul>
+                            <li>Conservação do momento angular</li>
+                            <li>Força gravitacional central</li>
+                            <li>Variação da velocidade orbital com a distância</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            
+
             <div id="third-law" class="tab-content">
                 <div class="law-section">
                     <h3 class="law-title">Terceira Lei de Kepler - Lei Harmônica</h3>
@@ -643,15 +652,39 @@
     <!-- Adicionar um div para mostrar informações das áreas fora do canvas -->
     <div class="area-info" id="areaInfo">
         <h3>Demonstração da Segunda Lei de Kepler</h3>
-        <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-        <table id="areaMeasurements">
-            <tr>
-                <th>Setor</th>
-                <th>Área (u²)</th>
-                <th>Tempo (s)</th>
-                <th>Velocidade</th>
-            </tr>
-        </table>
+        <div class="area-data">
+            <div class="area-summary"></div>
+                <p>As áreas dos setores são iguais para tempos iguais de 3 segundos.</p>
+                <p>Observe como a velocidade do planeta aumenta quando está mais próximo do Sol.</p>
+            </div>
+            <div class="measurements">
+                <table id="areaMeasurements">
+                    <thead>
+                        <tr>
+                            <th>Setor</th>
+                            <th>Área (UA²)</th>
+                            <th>Velocidade</th>
+                            <th>Tempo (s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adicionar após o canvas -->
+    <div id="physicsInfo" style="display: none; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(100, 255, 218, 0.2);">
+        <div style="color: #64ffda; margin-bottom: 10px;">Valores Instantâneos</div>
+        <div class="parameter-box" style="margin: 5px 0;">
+            <div>Velocidade:</div>
+            <div id="velocityOutput">0.0 UA/ano</div>
+        </div>
+        <div class="parameter-box" style="margin: 5px 0;">
+            <div>Momento Angular:</div>
+            <div id="angularMomentumOutput">0.0 UA²/ano</div>
+        </div>
     </div>
 
     <script>
@@ -667,6 +700,7 @@
         let sectorPoints = [];
         let lastSampleTime = Date.now();
         let scaledA, scaledB; // Adicionar estas variáveis globalmente
+        let showVectors = false;  // Flag para controlar a exibição dos vetores
         
         // Função para mudar de guia
         function changeTab(event, tabId) {
@@ -701,6 +735,10 @@
                 // Atualizar a tabela de áreas
                 updateAreaTable();
             }
+
+            // Atualizar a flag dos vetores e mostrar/ocultar informações físicas
+            showVectors = (tabId === 'first-law');
+            document.getElementById('physicsInfo').style.display = showVectors ? 'block' : 'none';
         }
         
         // Gerar estrelas aleatórias para o fundo
@@ -768,1145 +806,662 @@
             return p / (1 + e * Math.cos(theta));
         }
         
-        function calculateSectorArea(x1, y1, x2, y2, starX, starY, a, b, angle1, angle2) {
-            // Normalizar os ângulos para evitar problemas na transição
-            let theta1 = Math.atan2(y1 - starY, x1 - starX);
-            let theta2 = Math.atan2(y2 - starY, x2 - starX);
+        function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
+            // Converte coordenadas para ângulos em relação ao centro da elipse
+            const cx = fx + (a * e); // Centro da elipse
+            const cy = fy;
             
-            // Corrigir a descontinuidade na transição do hemisfério
-            if (theta2 - theta1 > Math.PI) {
-                theta2 -= 2 * Math.PI;
-            } else if (theta1 - theta2 > Math.PI) {
+            // Converte pontos para ângulos em relação ao centro
+            let theta1 = Math.atan2(y1 - cy, x1 - cx);
+            let theta2 = Math.atan2(y2 - cy, x2 - cx);
+            
+            // Normaliza os ângulos e ajusta para rotação horária
+            theta1 = -normalizeAngle(theta1);
+            theta2 = -normalizeAngle(theta2);
+            
+            // Calcula a área usando a função específica para elipse
+            const area = calculateEllipticalArea(theta1, theta2, scaledA, scaledB);
+            
+            return Math.abs(area);
+        }
+
+        function animateOrbit(a, e, T) {
+            let lastSectorTime = 0; // Adicionar esta variável para controlar o tempo do último setor
+
+            const canvas = document.getElementById('orbitCanvas');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Cálculo dos parâmetros da órbita elíptica
+            const b = a * Math.sqrt(1 - e * e); // Semi-eixo menor
+            const c = a * e; // Distância do centro ao foco
+            
+            // Escala para visualização
+            const scale = 60;
+            const scaledA = a * scale;
+            const scaledB = b * scale;
+            const scaledC = c * scale;
+            
+            // Posicionar a estrela em um dos focos, garantindo que o centro da elipse esteja no centro do canvas
+            const starX = centerX - scaledC;
+            const starY = centerY;
+            
+            // Configurar o movimento em coordenadas polares
+            let trueAnomaly = 0;
+            const baseSpeed = (2 * Math.PI) / (T * 40); // Alterado de 100 para 60 para aumentar a velocidade
+            
+            // Armazenar o caminho da órbita - com centro da elipse no centro do canvas
+            const orbitPath = [];
+            for (let theta = 0; theta < 2 * Math.PI; theta += 0.01) {
+                // Coordenadas em relação ao centro da elipse
+                const x = centerX + scaledA * Math.cos(theta);
+                const y = centerY + scaledB * Math.sin(theta);
+                orbitPath.push({x, y});
+            }
+
+            // Variáveis para demonstração da segunda lei
+            let lastSampleTime = Date.now();
+            const maxSectors = 3; // Número de setores a serem mostrados
+            
+            // Calcular uma área fixa para todos os setores (baseada na área total da elipse)
+            const totalEllipseArea = Math.PI * scaledA * scaledB;
+            const fixedSectorArea = totalEllipseArea / 12; // Dividir em 12 setores (30 graus cada)
+            
+            // Função para calcular a anomalia verdadeira a partir da anomalia excêntrica
+            function trueAnomalyFromE(E) {
+                return 2 * Math.atan(Math.sqrt((1+e)/(1-e)) * Math.tan(E/2));
+            }
+            
+            // Função para calcular a anomalia excêntrica a partir da anomalia média (equação de Kepler)
+            function eccentricAnomaly(M) {
+                // Resolver a equação de Kepler iterativamente
+                let E = M; // Valor inicial
+                let delta = 1;
+                let iterations = 0;
+                
+                while (Math.abs(delta) > 1e-6 && iterations < 20) {
+                    delta = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+                    E = E - delta;
+                    iterations++;
+                }
+                
+                return E;
+            }
+            
+            // Função para calcular o ângulo necessário para varrer uma área específica a partir de um ângulo inicial
+            function calculateAngleForArea(startAngle, targetArea) {
+                // Para simplificação, usamos a área do setor e a relação entre ângulo e área na elipse
+                // A área de um setor elíptico é proporcional ao ângulo varrido
+                const totalArea = Math.PI * scaledA * scaledB;  // Área total da elipse
+                const angleForTargetArea = (targetArea / totalArea) * 2 * Math.PI;  // Proporção da área total
+                
+                return (startAngle + angleForTargetArea) % (2 * Math.PI);
+            }
+
+            let fixedTimeInterval = 3000; // Alterado para 3 segundos
+
+            function drawFrame() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Desenhar as estrelas no plano de fundo
+                for (const star of stars) {
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                    ctx.fill();
+                }
+                
+                // Desenhar a órbita completa
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < orbitPath.length; i++) {
+                    if (i === 0) {
+                        ctx.moveTo(orbitPath[i].x, orbitPath[i].y);
+                    } else {
+                        ctx.lineTo(orbitPath[i].x, orbitPath[i].y);
+                    }
+                }
+                ctx.closePath();
+                ctx.stroke();
+                
+                // Desenhar o centro da elipse
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 2, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fill();
+                
+                // Desenhar os focos
+                // Sol em um dos focos
+                ctx.beginPath();
+                ctx.arc(starX, starY, 8, 0, 2 * Math.PI);
+                ctx.fillStyle = 'yellow';
+                ctx.fill();
+                
+                // Brilho ao redor da estrela
+                const gradient = ctx.createRadialGradient(
+                    starX, starY, 8,
+                    starX, starY, 16
+                );
+                gradient.addColorStop(0, 'rgba(255, 255, 150, 0.8)');
+                gradient.addColorStop(1, 'rgba(255, 255, 150, 0)');
+                ctx.beginPath();
+                ctx.arc(starX, starY, 16, 0, 2 * Math.PI);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                // Outro foco
+                ctx.beginPath();
+                ctx.arc(centerX + scaledC, centerY, 3, 0, 2 * Math.PI);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                
+                // Desenhar os eixos
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.setLineDash([5, 3]);
+                // Semi-eixo maior
+                ctx.moveTo(centerX - scaledA, centerY);
+                ctx.lineTo(centerX + scaledA, centerY);
+                // Semi-eixo menor
+                ctx.moveTo(centerX, centerY - scaledB);
+                ctx.lineTo(centerX, centerY + scaledB);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // Calcular posição do planeta usando equação paramétrica da elipse
+                // Usando o ângulo em relação ao centro da elipse (não ao foco)
+                const x = centerX + scaledA * Math.cos(trueAnomaly);
+                const y = centerY + scaledB * Math.sin(trueAnomaly);
+                
+                // Segunda Lei - Deve vir antes do desenho do planeta
+                if (showSecondLaw) {
+                    const currentTime = Date.now();
+                    
+                    // Adicionar novo ponto quando necessário
+                    if (currentTime >= nextSectorTime && sectorPoints.length < 4) { // Aumentado para 4 para incluir o ponto final
+                        sectorPoints.push({
+                            x: x,
+                            y: y,
+                            angle: trueAnomaly,
+                            startTime: currentTime
+                        });
+                        
+                        // Calcular e mostrar informações da área para o setor completo
+                        if (sectorPoints.length > 1) {
+                            const idx = sectorPoints.length - 2; // Índice do setor atual
+                            const startPoint = sectorPoints[idx];
+                            const endPoint = sectorPoints[idx + 1];
+                            
+                            const area = calculateSectorArea(
+                                startPoint.x, startPoint.y,
+                                endPoint.x, endPoint.y,
+                                starX, starY,
+                                scaledA, scaledB,
+                                startPoint.angle, endPoint.angle
+                            );
+                            
+                            updateAreaInfo(area, endPoint.startTime - startPoint.startTime, idx);
+                        }
+                        
+                        nextSectorTime = currentTime + fixedTimeInterval;
+                    }
+                    
+                    // Desenhar todos os setores completos
+                    for (let i = 0; i < sectorPoints.length - 1; i++) {
+                        const start = sectorPoints[i];
+                        const end = sectorPoints[i + 1];
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(starX, starY);
+                        ctx.lineTo(start.x, start.y);
+                        
+                        // Desenhar o arco da elipse
+                        let startAngle = start.angle;
+                        let endAngle = end.angle;
+                        
+                        // Garantir que endAngle seja maior que startAngle
+                        if (endAngle < startAngle) {
+                            endAngle += 2 * Math.PI;
+                        }
+                        
+                        ctx.ellipse(
+                            centerX, centerY,
+                            scaledA, scaledB,
+                            0,
+                            startAngle,
+                            endAngle
+                        );
+                        
+                        ctx.lineTo(starX, starY);
+                        ctx.fillStyle = ["#FFB74D4D", "#64B5F64D", "#F062924D"][i];
+                        ctx.strokeStyle = ["#FFB74D", "#64B5F6", "#F06292"][i];
+                        ctx.fill();
+                        ctx.stroke();
+                    }
+                    
+                    // Resetar após completar os 3 setores e um intervalo adicional
+                    if (sectorPoints.length >= 4 && currentTime > nextSectorTime) {
+                        sectorPoints = [];
+                        nextSectorTime = currentTime;
+                    }
+                }
+                
+                // Desenhar o planeta
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = '#3498db';
+                ctx.fill();
+                
+                // Resetar os pontos após completar 3 setores e um intervalo adicional
+                if (showSecondLaw && sectorPoints.length >= 3 && Date.now() > nextSectorTime + fixedTimeInterval) {
+                    sectorPoints = [];
+                    nextSectorTime = Date.now();
+                }
+
+                // Calcular distância do planeta ao sol para a velocidade
+                const distanceFromSun = Math.sqrt(Math.pow(x - starX, 2) + Math.pow(y - starY, 2));
+                
+                // Calcular a velocidade orbital usando a versão simplificada da equação de Kepler
+                // v ∝ √(1/r)  onde r é a distância ao Sol
+                const perihelionDistance = scaledA * (1 - e); // Menor distância ao Sol
+                const aphelionDistance = scaledA * (1 + e);   // Maior distância ao Sol
+                const perihelionVelocity = Math.sqrt(1 / perihelionDistance);
+                const currentVelocity = Math.sqrt(1 / distanceFromSun);
+                
+                // Normalizar a velocidade em relação à velocidade no periélio
+                const relativeVelocity = currentVelocity / perihelionVelocity;
+                
+                // Ajustar a velocidade angular baseada na velocidade orbital
+                const angularSpeed = baseSpeed * relativeVelocity;
+                
+                // Desenhar uma pequena cauda para mostrar o movimento
+                const prevAnomaly = trueAnomaly - angularSpeed;
+                const prevX = centerX + scaledA * Math.cos(prevAnomaly);
+                const prevY = centerY + scaledB * Math.sin(prevAnomaly);
+                
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(prevX, prevY);
+                ctx.strokeStyle = 'rgba(52, 152, 219, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Mostrar velocidade relativa
+                ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                ctx.font = '12px Arial';
+                const speedText = `${relativeVelocity.toFixed(2)}x`;
+                ctx.fillText(speedText, x + 10, y - 10);
+
+                // Após desenhar o planeta, adicionar os vetores quando showVectors for true
+                if (showVectors) {
+                    // Calcular vetor velocidade
+                    const speedScale = 30;
+                    const distance = Math.sqrt(Math.pow(x - starX, 2) + Math.pow(y - starY, 2));
+                    
+                    // Velocidade orbital pela lei da gravitação (v ∝ √(1/r))
+                    const velocityMagnitude = Math.sqrt(1 / (distance/scale)) * speedScale;
+                    
+                    // Componentes tangenciais da velocidade (perpendicular ao raio vetor)
+                    const dx = x - starX;
+                    const dy = y - starY;
+                    // Rotação de 90 graus para obter direção tangencial
+                    const vx = velocityMagnitude * (-dy / distance);
+                    const vy = velocityMagnitude * (dx / distance);
+                    
+                    drawVector(ctx, x, y, x + vx, y + vy, '#4CAF50', 'v');
+
+                    // Calcular vetor força peso (mg)
+                    const baseGravity = -50;
+                    const forceMagnitude = baseGravity / Math.pow(distance/scale, 2);
+                    const gx = (dx / distance) * forceMagnitude;
+                    const gy = (dy / distance) * forceMagnitude;
+                    drawVector(ctx, x, y, x + gx, y + gy, '#FF5722', 'P');
+
+                    // Calcular e atualizar velocidade e momento angular
+                    const velocity = velocityMagnitude / speedScale;
+                    const angularMomentum = Math.sqrt(a * (1 - e*e));
+                    
+                    document.getElementById('velocityOutput').textContent = velocity.toFixed(2) + ' UA/ano';
+                    document.getElementById('angularMomentumOutput').textContent = angularMomentum.toFixed(2) + ' UA²/ano';
+
+                    // Atualizar informações dos setores se estiverem sendo mostrados
+                    if (showSecondLaw && sectorPoints.length > 0) {
+                        const currentTime = Date.now();
+                        const lastPoint = sectorPoints[sectorPoints.length - 1];
+                        const area = calculateSectorArea(
+                            lastPoint.x, lastPoint.y,
+                            x, y,
+                            starX, starY,
+                            scaledA, scaledB,
+                            lastPoint.angle, trueAnomaly
+                        );
+                        
+                        // Atualizar informações em tempo real
+                        const timeElapsed = (currentTime - lastPoint.startTime) / 1000;
+                        const instantVelocity = area / timeElapsed;
+                        
+                        // Atualizar display com informações instantâneas
+                        const areaInfo = document.getElementById('areaInfo');
+                        if (areaInfo) {
+                            const sectorDiv = areaInfo.querySelector(`#sector-${sectorPoints.length - 1}`);
+                            if (sectorDiv) {
+                                const velocitySpan = sectorDiv.querySelector('.velocity');
+                                if (velocitySpan) {
+                                    velocitySpan.textContent = instantVelocity.toFixed(1);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Atualizar posição para próximo frame
+                trueAnomaly += angularSpeed;
+                if (trueAnomaly >= 2 * Math.PI) {
+                    trueAnomaly = 0;
+                }
+
+                animationId = requestAnimationFrame(drawFrame);
+            }
+            
+            // Função para calcular a área do setor elíptico
+            function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
+                // Normalizar os ângulos para garantir que angle2 > angle1
+                while (angle2 < angle1) angle2 += 2 * Math.PI;
+                
+                // Usar a fórmula correta para área do setor elíptico
+                // A = (ab/2) * (theta - e*sin(theta))
+                // onde theta é o ângulo entre os pontos
+                // e e é a excentricidade
+                const e = Math.sqrt(1 - (b*b)/(a*a)); // excentricidade
+                const deltaTheta = angle2 - angle1;
+                const area = (a * b / 2) * (deltaTheta - e * (Math.sin(angle2) - Math.sin(angle1)));
+                
+                return Math.abs(area);
+            }
+            
+            // Função para interpolar pontos entre dois pontos da órbita
+            function interpolatePoints(p1, p2, t) {
+                return {
+                    x: p1.x + (p2.x - p1.x) * t,
+                    y: p1.y + (p2.y - p1.y) * t,
+                    angle: p1.angle + (p2.angle - p1.angle) * t
+                };
+            }
+
+            // Função melhorada para calcular a área do setor elíptico usando radianos
+            function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
+                // Garantir precisão double e conversão para radianos
+                angle1 = Number(angle1) % (2 * Math.PI);
+                angle2 = Number(angle2) % (2 * Math.PI);
+                a = Number(a);
+                b = Number(b);
+                
+                // Normalizar ângulos mantendo-os em radianos
+                if (angle2 < angle1) {
+                    angle2 += 2.0 * Math.PI;
+                }
+                
+                // Método de Simpson com mais pontos de integração
+                const n = 100; // Aumentado para maior precisão
+                const h = (angle2 - angle1) / n;
+                let sum = 0.0;
+                
+                for (let i = 0; i <= n; i++) {
+                    const theta = angle1 + i * h;
+                    // Calcular o raio usando a equação paramétrica da elipse
+                    const r = (a * b) / Math.sqrt(
+                        Math.pow(b * Math.cos(theta), 2.0) + 
+                        Math.pow(a * Math.sin(theta), 2.0)
+                    );
+                    
+                    // Aplicar a regra de Simpson com coeficientes precisos
+                    const coef = (i === 0 || i === n) ? 1.0 : (i % 2 === 0 ? 2.0 : 4.0);
+                    sum += coef * 0.5 * r * r;
+                }
+                
+                // Calcular a área final
+                const area = Math.abs((h / 3.0) * sum);
+                return area;
+            }
+
+            // Modificar a parte que calcula e mostra os setores
+            if (showSecondLaw) {
+                const currentTime = Date.now();
+                const samplingRate = 60; // 60 Hz de amostragem
+                const numInterpolations = 5; // Pontos interpolados entre cada par de pontos
+                
+                if (currentTime >= nextSectorTime && sectorPoints.length < 3) {
+                    if (sectorPoints.length > 0) {
+                        const prevPoint = sectorPoints[sectorPoints.length - 1];
+                        let totalArea = 0.0;
+                        
+                        // Calcular área usando pontos interpolados
+                        for (let i = 0; i < numInterpolations; i++) {
+                            const t1 = i / numInterpolations;
+                            const t2 = (i + 1) / numInterpolations;
+                            const p1 = interpolatePoints(prevPoint, {x, y, angle: trueAnomaly}, t1);
+                            const p2 = interpolatePoints(prevPoint, {x, y, angle: trueAnomaly}, t2);
+                            
+                            totalArea += calculateSectorArea(
+                                p1.x, p1.y,
+                                p2.x, p2.y,
+                                starX, starY,
+                                scaledA, scaledB,
+                                p1.angle, p2.angle
+                            );
+                        }
+                        
+                        // Atualizar display com maior precisão
+                        const elapsedTime = (currentTime - prevPoint.startTime) / 1000.0;
+                        const velocityMedia = totalArea / elapsedTime;
+                        
+                        updateSectorInfo(totalArea, elapsedTime, velocityMedia, sectorPoints.length - 1);
+                    }
+                    
+                    // Armazenar com maior precisão
+                    sectorPoints.push({
+                        x: Number(x),
+                        y: Number(y),
+                        angle: Number(trueAnomaly),
+                        startTime: Number(currentTime)
+                    });
+                }
+            }
+            
+            drawFrame();
+        }
+        
+        // Função para atualizar a tabela de informações das áreas
+        function updateAreaTable() {
+            for (let i = 0; i < sectorPoints.length - 1; i++) {
+                const startPoint = sectorPoints[i];
+                const endPoint = sectorPoints[i + 1];
+                
+                const area = calculateSectorArea(
+                    startPoint.x, startPoint.y,
+                    endPoint.x, endPoint.y,
+                    starX, starY,
+                    scaledA, scaledB,
+                    startPoint.angle, endPoint.angle
+                );
+                
+                const timeDiff = (endPoint.startTime - startPoint.startTime) / 1000;
+                const velocity = area / timeDiff;
+                
+                const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
+                
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>
+                        <div class="equal-area-indicator" style="background-color: ${sectorColors[i]}"></div>
+                        Setor ${i + 1}
+                    </td>
+                    <td>${area.toFixed(0)} u²</td>
+                    <td>${timeDiff.toFixed(1)} s</td>
+                    <td>${velocity.toFixed(1)} u²/s</td>
+                `;
+            }
+        }
+
+        // Modificar a parte que controla os setores no loop de animação
+        if (showSecondLaw) {
+            const currentTime = Date.now();
+            
+            // Adicionar novo ponto quando necessário e limitar a 3 setores
+            if (currentTime >= nextSectorTime && sectorPoints.length <= 2) {
+                sectorPoints.push({
+                    x: x,
+                    y: y,
+                    angle: trueAnomaly,
+                    startTime: currentTime
+                });
+                
+                nextSectorTime = currentTime + fixedTimeInterval;
+                updateAreaTable(); // Atualizar tabela após adicionar novo ponto
+            }
+            
+            // Resetar após 2 setores completos (3 pontos)
+            if (sectorPoints.length > 2 && currentTime > nextSectorTime) {
+                sectorPoints = [];
+                nextSectorTime = currentTime;
+            }
+        }
+        
+        // Iniciar simulação quando a página carregar
+        window.onload = function() {
+            generateStars(100); // Gerar 100 estrelas
+            startSimulation();
+            const infoElement = document.querySelector('.info');
+            console.log('Altura da caixa de informações:', infoElement.offsetHeight + 'px');
+        };
+
+        function calculateEllipticalArea(theta1, theta2, a, b) {
+            // Normaliza os ângulos para o intervalo [0, 2π]
+            theta1 = normalizeAngle(theta1);
+            theta2 = normalizeAngle(theta2);
+            
+            // Ajusta para rotação horária e garante θ2 > θ1
+            if (theta2 <= theta1) {
                 theta2 += 2 * Math.PI;
             }
             
-            // Calcular área usando a forma paramétrica da elipse
-            const p = a * (1 - Math.pow(e, 2)); // Parâmetro orbital
-            const area = (p * p) / (2 * Math.sqrt(1 - Math.pow(e, 2))) * 
-                        (theta2 - theta1 - e * (Math.sin(theta2) - Math.sin(theta1)));
+            // Área do setor elíptico = (ab/2) * (θ2 - θ1)
+            return (a * b * Math.abs(theta2 - theta1)) / 2;
+        }
+
+        function normalizeAngle(angle) {
+            // Normaliza o ângulo para o intervalo [0, 2π]
+            angle = angle % (2 * Math.PI);
+            return angle < 0 ? angle + 2 * Math.PI : angle;
+        }
+
+        function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
+            // Converte coordenadas para ângulos em relação ao centro da elipse
+            const cx = fx + (a * e); // Centro da elipse
+            const cy = fy;
+            
+            // Converte pontos para ângulos em relação ao centro
+            let theta1 = Math.atan2(y1 - cy, x1 - cx);
+            let theta2 = Math.atan2(y2 - cy, x2 - cx);
+            
+            // Normaliza os ângulos e ajusta para rotação horária
+            theta1 = -normalizeAngle(theta1);
+            theta2 = -normalizeAngle(theta2);
+            
+            // Calcula a área usando a função específica para elipse
+            const area = calculateEllipticalArea(theta1, theta2, scaledA, scaledB);
             
             return Math.abs(area);
         }
 
-        function animateOrbit(a, e, T) {
-            let lastSectorTime = 0; // Adicionar esta variável para controlar o tempo do último setor
-
-            const canvas = document.getElementById('orbitCanvas');
-            const ctx = canvas.getContext('2d');
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            
-            // Cálculo dos parâmetros da órbita elíptica
-            const b = a * Math.sqrt(1 - e * e); // Semi-eixo menor
-            const c = a * e; // Distância do centro ao foco
-            
-            // Escala para visualização
-            const scale = 60;
-            const scaledA = a * scale;
-            const scaledB = b * scale;
-            const scaledC = c * scale;
-            
-            // Posicionar a estrela em um dos focos, garantindo que o centro da elipse esteja no centro do canvas
-            const starX = centerX - scaledC;
-            const starY = centerY;
-            
-            // Configurar o movimento em coordenadas polares
-            let trueAnomaly = 0;
-            const baseSpeed = (2 * Math.PI) / (T * 40); // Alterado de 100 para 60 para aumentar a velocidade
-            
-            // Armazenar o caminho da órbita - com centro da elipse no centro do canvas
-            const orbitPath = [];
-            for (let theta = 0; theta < 2 * Math.PI; theta += 0.01) {
-                // Coordenadas em relação ao centro da elipse
-                const x = centerX + scaledA * Math.cos(theta);
-                const y = centerY + scaledB * Math.sin(theta);
-                orbitPath.push({x, y});
-            }
-
-            // Variáveis para demonstração da segunda lei
-            let lastSampleTime = Date.now();
-            const maxSectors = 3; // Número de setores a serem mostrados
-            
-            // Calcular uma área fixa para todos os setores (baseada na área total da elipse)
-            const totalEllipseArea = Math.PI * scaledA * scaledB;
-            const fixedSectorArea = totalEllipseArea / 12; // Dividir em 12 setores (30 graus cada)
-            
-            // Função para calcular a anomalia verdadeira a partir da anomalia excêntrica
-            function trueAnomalyFromE(E) {
-                return 2 * Math.atan(Math.sqrt((1+e)/(1-e)) * Math.tan(E/2));
-            }
-            
-            // Função para calcular a anomalia excêntrica a partir da anomalia média (equação de Kepler)
-            function eccentricAnomaly(M) {
-                // Resolver a equação de Kepler iterativamente
-                let E = M; // Valor inicial
-                let delta = 1;
-                let iterations = 0;
-                
-                while (Math.abs(delta) > 1e-6 && iterations < 20) {
-                    delta = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-                    E = E - delta;
-                    iterations++;
-                }
-                
-                return E;
-            }
-            
-            // Função para calcular o ângulo necessário para varrer uma área específica a partir de um ângulo inicial
-            function calculateAngleForArea(startAngle, targetArea) {
-                // Para simplificação, usamos a área do setor e a relação entre ângulo e área na elipse
-                // A área de um setor elíptico é proporcional ao ângulo varrido
-                const totalArea = Math.PI * scaledA * scaledB;  // Área total da elipse
-                const angleForTargetArea = (targetArea / totalArea) * 2 * Math.PI;  // Proporção da área total
-                
-                return (startAngle + angleForTargetArea) % (2 * Math.PI);
-            }
-
-            let fixedTimeInterval = 3000; // Alterado para 3 segundos
-
-            function drawFrame() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Desenhar as estrelas no plano de fundo
-                for (const star of stars) {
-                    ctx.beginPath();
-                    ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-                    ctx.fill();
-                }
-                
-                // Desenhar a órbita completa
-                ctx.beginPath();
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-                ctx.lineWidth = 1;
-                for (let i = 0; i < orbitPath.length; i++) {
-                    if (i === 0) {
-                        ctx.moveTo(orbitPath[i].x, orbitPath[i].y);
-                    } else {
-                        ctx.lineTo(orbitPath[i].x, orbitPath[i].y);
-                    }
-                }
-                ctx.closePath();
-                ctx.stroke();
-                
-                // Desenhar o centro da elipse
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, 2, 0, 2 * Math.PI);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                ctx.fill();
-                
-                // Desenhar os focos
-                // Sol em um dos focos
-                ctx.beginPath();
-                ctx.arc(starX, starY, 8, 0, 2 * Math.PI);
-                ctx.fillStyle = 'yellow';
-                ctx.fill();
-                
-                // Brilho ao redor da estrela
-                const gradient = ctx.createRadialGradient(
-                    starX, starY, 8,
-                    starX, starY, 16
-                );
-                gradient.addColorStop(0, 'rgba(255, 255, 150, 0.8)');
-                gradient.addColorStop(1, 'rgba(255, 255, 150, 0)');
-                ctx.beginPath();
-                ctx.arc(starX, starY, 16, 0, 2 * Math.PI);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                // Outro foco
-                ctx.beginPath();
-                ctx.arc(centerX + scaledC, centerY, 3, 0, 2 * Math.PI);
-                ctx.fillStyle = 'red';
-                ctx.fill();
-                
-                // Desenhar os eixos
-                ctx.beginPath();
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-                ctx.setLineDash([5, 3]);
-                // Semi-eixo maior
-                ctx.moveTo(centerX - scaledA, centerY);
-                ctx.lineTo(centerX + scaledA, centerY);
-                // Semi-eixo menor
-                ctx.moveTo(centerX, centerY - scaledB);
-                ctx.lineTo(centerX, centerY + scaledB);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                
-                // Calcular posição do planeta usando equação paramétrica da elipse
-                // Usando o ângulo em relação ao centro da elipse (não ao foco)
-                const x = centerX + scaledA * Math.cos(trueAnomaly);
-                const y = centerY + scaledB * Math.sin(trueAnomaly);
-                
-                // Demonstração da Segunda Lei de Kepler (áreas iguais em tempos iguais)
-                if (showSecondLaw) {
-                    const currentTime = Date.now();
-                    
-                    if (currentTime >= nextSectorTime && sectorPoints.length < 2) {
-                        // Limpar conteúdo se for o primeiro ponto
-                        if (sectorPoints.length === 0) {
-                            const areaInfoDiv = document.getElementById('areaInfo');
-                            areaInfoDiv.innerHTML = `
-                                <h3>Demonstração da Segunda Lei de Kepler</h3>
-                                <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-                            `;
-                        }
-                        
-                        // Calcular e mostrar informações se já tivermos um ponto anterior
-                        if (sectorPoints.length > 0) {
-                            const prevPoint = sectorPoints[sectorPoints.length - 1];
-                            const area = calculateSectorArea(
-                                prevPoint.x, prevPoint.y,
-                                x, y,
-                                starX, starY,
-                                scaledA, scaledB,
-                                prevPoint.angle, trueAnomaly
-                            );
-                            
-                            const elapsedTime = (currentTime - prevPoint.startTime) / 1000;
-                            const velocityMedia = area / elapsedTime;
-                            
-                            const areaInfoDiv = document.getElementById('areaInfo');
-                            const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
-                            const sectorIndex = sectorPoints.length - 1;
-                            
-                            const sectorInfo = `
-                                <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;">
-                                    <div style="display: flex; align-items: center;">
-                                        <div style="width: 12px; height: 12px; background: ${sectorColors[sectorIndex]}; border-radius: 50%; margin-right: 10px;"></div>
-                                        <strong>Setor ${sectorIndex + 1}</strong>
-                                    </div>
-                                    <div style="margin-left: 22px;">
-                                        <div>Área: ${area.toFixed(0)} u²</div>
-                                        <div>Tempo: ${elapsedTime.toFixed(1)} s</div>
-                                        <div>Velocidade média: ${velocityMedia.toFixed(1)} u²/s</div>
-                                    </div>
-                                </div>`;
-                            
-                            const infoContainer = document.createElement('div');
-                            infoContainer.innerHTML = sectorInfo;
-                            areaInfoDiv.appendChild(infoContainer);
-                        }
-                        
-                        // Adicionar novo ponto
-                        sectorPoints.push({
-                            x: x,
-                            y: y,
-                            angle: trueAnomaly,
-                            startTime: currentTime
-                        });
-                        
-                        if (sectorPoints.length === 2) {
-                            lastSectorTime = Date.now(); // Marcar o momento em que o segundo setor foi criado
-                        }
-                        
-                        nextSectorTime = currentTime + fixedTimeInterval;
-                    }
-                }
-                
-                // Limpar os setores após completar o ciclo
-                if (showSecondLaw && sectorPoints.length >= 3 && Date.now() > nextSectorTime + fixedTimeInterval) {
-                    sectorPoints = [];
-                    nextSectorTime = Date.now();
-                    const areaInfoDiv = document.getElementById('areaInfo');
-                    areaInfoDiv.innerHTML = `
-                        <h3>Demonstração da Segunda Lei de Kepler</h3>
-                        <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-                    `;
-                }
-
-                // Desenhar o planeta
-                ctx.beginPath();
-                ctx.arc(x, y, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = '#3498db';
-                ctx.fill();
-                
-                // Resetar os pontos após completar 3 setores e um intervalo adicional
-                if (showSecondLaw && sectorPoints.length >= 3 && Date.now() > nextSectorTime + fixedTimeInterval) {
-                    sectorPoints = [];
-                    nextSectorTime = Date.now();
-                }
-
-                // Calcular distância do planeta ao sol para a velocidade
-                const distanceFromSun = Math.sqrt(Math.pow(x - starX, 2) + Math.pow(y - starY, 2));
-                
-                // Calcular a velocidade orbital usando a versão simplificada da equação de Kepler
-                // v ∝ √(1/r)  onde r é a distância ao Sol
-                const perihelionDistance = scaledA * (1 - e); // Menor distância ao Sol
-                const aphelionDistance = scaledA * (1 + e);   // Maior distância ao Sol
-                const perihelionVelocity = Math.sqrt(1 / perihelionDistance);
-                const currentVelocity = Math.sqrt(1 / distanceFromSun);
-                
-                // Normalizar a velocidade em relação à velocidade no periélio
-                const relativeVelocity = currentVelocity / perihelionVelocity;
-                
-                // Ajustar a velocidade angular baseada na velocidade orbital
-                const angularSpeed = baseSpeed * relativeVelocity;
-                
-                // Desenhar uma pequena cauda para mostrar o movimento
-                const prevAnomaly = trueAnomaly - angularSpeed;
-                const prevX = centerX + scaledA * Math.cos(prevAnomaly);
-                const prevY = centerY + scaledB * Math.sin(prevAnomaly);
-                
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(prevX, prevY);
-                ctx.strokeStyle = 'rgba(52, 152, 219, 0.5)';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                
-                // Mostrar velocidade relativa
-                ctx.fillStyle = 'rgba(255,255,255,0.7)';
-                ctx.font = '12px Arial';
-                const speedText = `${relativeVelocity.toFixed(2)}x`;
-                ctx.fillText(speedText, x + 10, y - 10);
-
-                trueAnomaly += angularSpeed;
-                if (trueAnomaly >= 2 * Math.PI) {
-                    trueAnomaly = 0;
-                }
-                
-                // Calcular e armazenar áreas quando estivermos mostrando a segunda lei
-                if (showSecondLaw) {
-                    const currentTime = Date.now();
-                    
-                    if (currentTime >= nextSectorTime && sectorPoints.length < 3) {
-                        // Calcular a área do setor se já tivermos um ponto anterior
-                        if (sectorPoints.length > 0) {
-                            const prevPoint = sectorPoints[sectorPoints.length - 1];
-                            const area = calculateSectorArea(
-                                prevPoint.x, prevPoint.y,
-                                x, y,
-                                starX, starY,
-                                scaledA, scaledB,
-                                prevPoint.angle, trueAnomaly
-                            );
-                            
-                            // Atualizar o elemento HTML com as informações do setor
-                            const areaInfoDiv = document.getElementById('areaInfo');
-                            const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
-                            const sectorIndex = sectorPoints.length - 1;
-                            
-                            const elapsedTime = (currentTime - prevPoint.startTime) / 1000; // Tempo em segundos
-                            const velocityMedia = area / elapsedTime;
-                            
-                            // Criar uma string formatada com as informações
-                            const sectorInfo = `
-                                <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;">
-                                    <div style="display: flex; align-items: center;">
-                                        <div style="width: 12px; height: 12px; background: ${sectorColors[sectorIndex]}; border-radius: 50%; margin-right: 10px;"></div>
-                                        <strong>Setor ${sectorIndex + 1}</strong>
-                                    </div>
-                                    <div style="margin-left: 22px;">
-                                        <div>Área: ${area.toFixed(0)} u²</div>
-                                        <div>Tempo: ${elapsedTime.toFixed(1)} s</div>
-                                        <div>Velocidade média: ${velocityMedia.toFixed(1)} u²/s</div>
-                                    </div>
-                                </div>`;
-                            
-                            // Limpar conteúdo anterior se for o primeiro setor
-                            if (sectorIndex === 0) {
-                                areaInfoDiv.innerHTML = `
-                                    <h3>Demonstração da Segunda Lei de Kepler</h3>
-                                    <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-                                `;
-                            }
-                            
-                            // Adicionar as informações ao painel
-                            const infoContainer = document.createElement('div');
-                            infoContainer.innerHTML = sectorInfo;
-                            areaInfoDiv.appendChild(infoContainer);
-                        }
-                        
-                        sectorPoints.push({
-                            x: x,
-                            y: y,
-                            angle: trueAnomaly % (2 * Math.PI), // Garantir que o ângulo está em radianos e normalizado
-                            startTime: currentTime
-                        });
-                        
-                        nextSectorTime = currentTime + fixedTimeInterval;
-                    }
-                }
-
-                // Desenhar os setores existentes
-                if (showSecondLaw) {
-                    for (let i = 0; i < sectorPoints.length - 1; i++) {
-                        const startPoint = sectorPoints[i];
-                        const endPoint = sectorPoints[i + 1];
-                        const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
-                        
-                        // Desenhar o setor elíptico
-                        ctx.beginPath();
-                        ctx.moveTo(starX, starY);
-                        ctx.lineTo(startPoint.x, startPoint.y);
-                        
-                        // Desenhar o arco elíptico
-                        let startAngle = startPoint.angle;
-                        let endAngle = endPoint.angle;
-                        if (endAngle < startAngle) endAngle += 2 * Math.PI;
-                        
-                        ctx.ellipse(
-                            centerX, centerY,
-                            scaledA, scaledB,
-                            0,
-                            startAngle,
-                            endAngle
-                        );
-                        
-                        ctx.lineTo(starX, starY);
-                        ctx.fillStyle = sectorColors[i] + '4D'; // Adiciona 30% de transparência
-                        ctx.fill();
-                        ctx.strokeStyle = sectorColors[i];
-                        ctx.stroke();
-                    }
-                }
-
-                // Remover o código duplicado de reset e manter apenas uma verificação
-                if (showSecondLaw && sectorPoints.length === 2 && Date.now() > lastSectorTime + 8000) {
-                    sectorPoints = [];
-                    nextSectorTime = Date.now();
-                    lastSectorTime = 0;
-                    const areaInfoDiv = document.getElementById('areaInfo');
-                    areaInfoDiv.innerHTML = `
-                        <h3>Demonstração da Segunda Lei de Kepler</h3>
-                        <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-                    `;
-                }
-
-                animationId = requestAnimationFrame(drawFrame);
-            }
-            
-            // Função para calcular a área do setor elíptico
-            function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
-                // Normalizar os ângulos para garantir que angle2 > angle1
-                while (angle2 < angle1) angle2 += 2 * Math.PI;
-                
-                // Usar a fórmula correta para área do setor elíptico
-                // A = (ab/2) * (theta - e*sin(theta))
-                // onde theta é o ângulo entre os pontos
-                // e e é a excentricidade
-                const e = Math.sqrt(1 - (b*b)/(a*a)); // excentricidade
-                const deltaTheta = angle2 - angle1;
-                const area = (a * b / 2) * (deltaTheta - e * (Math.sin(angle2) - Math.sin(angle1)));
-                
-                return Math.abs(area);
-            }
-            
-            // Função para interpolar pontos entre dois pontos da órbita
-            function interpolatePoints(p1, p2, t) {
-                return {
-                    x: p1.x + (p2.x - p1.x) * t,
-                    y: p1.y + (p2.y - p1.y) * t,
-                    angle: p1.angle + (p2.angle - p1.angle) * t
-                };
-            }
-
-            // Função melhorada para calcular a área do setor elíptico usando radianos
-            function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
-                // Garantir precisão double e conversão para radianos
-                angle1 = Number(angle1) % (2 * Math.PI);
-                angle2 = Number(angle2) % (2 * Math.PI);
-                a = Number(a);
-                b = Number(b);
-                
-                // Normalizar ângulos mantendo-os em radianos
-                if (angle2 < angle1) {
-                    angle2 += 2.0 * Math.PI;
-                }
-                
-                // Método de Simpson com mais pontos de integração
-                const n = 100; // Aumentado para maior precisão
-                const h = (angle2 - angle1) / n;
-                let sum = 0.0;
-                
-                for (let i = 0; i <= n; i++) {
-                    const theta = angle1 + i * h;
-                    // Calcular o raio usando a equação paramétrica da elipse
-                    const r = (a * b) / Math.sqrt(
-                        Math.pow(b * Math.cos(theta), 2.0) + 
-                        Math.pow(a * Math.sin(theta), 2.0)
+        // Modifique a parte que atualiza os setores para usar o novo cálculo
+        if (showSecondLaw) {
+            // ...existing code...
+            if (currentTime >= nextSectorTime && sectorPoints.length < 2) {
+                if (sectorPoints.length > 0) {
+                    const prevPoint = sectorPoints[sectorPoints.length - 1];
+                    const area = calculateSectorArea(
+                        prevPoint.x, prevPoint.y,
+                        x, y,
+                        starX, starY,
+                        scaledA, scaledB,
+                        prevPoint.angle, trueAnomaly
                     );
                     
-                    // Aplicar a regra de Simpson com coeficientes precisos
-                    const coef = (i === 0 || i === n) ? 1.0 : (i % 2 === 0 ? 2.0 : 4.0);
-                    sum += coef * 0.5 * r * r;
+                    // ...existing code...
                 }
-                
-                // Calcular a área final
-                const area = Math.abs((h / 3.0) * sum);
-                return area;
-            }
-
-            // Modificar a parte que calcula e mostra os setores
-            if (showSecondLaw) {
-                const currentTime = Date.now();
-                const samplingRate = 60; // 60 Hz de amostragem
-                const numInterpolations = 5; // Pontos interpolados entre cada par de pontos
-                
-                if (currentTime >= nextSectorTime && sectorPoints.length < 3) {
-                    if (sectorPoints.length > 0) {
-                        const prevPoint = sectorPoints[sectorPoints.length - 1];
-                        let totalArea = 0.0;
-                        
-                        // Calcular área usando pontos interpolados
-                        for (let i = 0; i < numInterpolations; i++) {
-                            const t1 = i / numInterpolations;
-                            const t2 = (i + 1) / numInterpolations;
-                            const p1 = interpolatePoints(prevPoint, {x, y, angle: trueAnomaly}, t1);
-                            const p2 = interpolatePoints(prevPoint, {x, y, angle: trueAnomaly}, t2);
-                            
-                            totalArea += calculateSectorArea(
-                                p1.x, p1.y,
-                                p2.x, p2.y,
-                                starX, starY,
-                                scaledA, scaledB,
-                                p1.angle, p2.angle
-                            );
-                        }
-                        
-                        // Atualizar display com maior precisão
-                        const elapsedTime = (currentTime - prevPoint.startTime) / 1000.0;
-                        const velocityMedia = totalArea / elapsedTime;
-                        
-                        updateSectorInfo(totalArea, elapsedTime, velocityMedia, sectorPoints.length - 1);
-                    }
-                    
-                    // Armazenar com maior precisão
-                    sectorPoints.push({
-                        x: Number(x),
-                        y: Number(y),
-                        angle: Number(trueAnomaly),
-                        startTime: Number(currentTime)
-                    });
-                }
-            }
-            
-            drawFrame();
-        }
-        
-        // Função para atualizar a tabela de informações das áreas
-        function updateAreaTable() {
-            if (!showSecondLaw || sectorPoints.length < 2) return;
-            
-            const table = document.getElementById('areaMeasurements');
-            // Limpar linhas anteriores exceto o cabeçalho
-            while (table.rows.length > 1) {
-                table.deleteRow(1);
-            }
-            
-            // Adicionar dados de cada setor
-            for (let i = 0; i < sectorPoints.length - 1; i++) {
-                const startPoint = sectorPoints[i];
-                const endPoint = sectorPoints[i + 1];
-                
-                // Calcular a área do setor triangular
-                const dx1 = startPoint.x - starX;
-                const dy1 = startPoint.y - starY;
-                const dx2 = endPoint.x - starX;
-                const dy2 = endPoint.y - starY;
-                const area = Math.abs(dx1 * dy2 - dx2 * dy1) / 2;
-                
-                const timeDiff = ((endPoint.time - startPoint.time) / 1000).toFixed(1);
-                const velocity = (Math.sqrt(Math.pow(endPoint.x - startPoint.x, 2) + 
-                                           Math.pow(endPoint.y - startPoint.y, 2)) / parseFloat(timeDiff)).toFixed(1);
-                
-                const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
-                
-                const row = table.insertRow();
-                row.innerHTML = `
-                    <td>
-                        <div class="equal-area-indicator" style="background-color: ${sectorColors[i]}"></div>
-                        Setor ${i + 1}
-                    </td>
-                    <td>${(area).toFixed(0)} u²</td>
-                    <td>${timeDiff} s</td>
-                    <td>${velocity} u/s</td>
-                `;
+                // ...existing code...
             }
         }
-        
-        // Iniciar simulação quando a página carregar
-        window.onload = function() {
-            generateStars(100); // Gerar 100 estrelas
-            startSimulation();
-            const infoElement = document.querySelector('.info');
-            console.log('Altura da caixa de informações:', infoElement.offsetHeight + 'px');
-        };
 
-        function calculateEllipticalSectorArea(theta1, theta2, a, e) {
-            // Usa a equação correta para área do setor elíptico
-            const b = a * Math.sqrt(1 - e * e);
-            const p = a * (1 - e * e);
-            
-            // Integral da equação r²dθ/2 para órbita elíptica
-            const area = (a * b / 2) * (
-                (theta2 - theta1) - 
-                e * (Math.sin(theta2) - Math.sin(theta1))
+        // Adicionar função para desenhar vetores
+        function drawVector(ctx, startX, startY, endX, endY, color, label) {
+            const angle = Math.atan2(endY - startY, endX - startX);
+            const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            const headLength = Math.min(15, length * 0.3); // Aumentado e proporcional ao comprimento
+            const headAngle = Math.PI / 6;
+
+            // Desenhar a linha principal
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Desenhar a ponta da seta maior
+            ctx.beginPath();
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(
+                endX - headLength * Math.cos(angle - headAngle),
+                endY - headLength * Math.sin(angle - headAngle)
             );
-            
-            return Math.abs(area);
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(
+                endX - headLength * Math.cos(angle + headAngle),
+                endY - headLength * Math.sin(angle + headAngle)
+            );
+            ctx.stroke();
+
+            // Desenhar o label
+            if (label) {
+                ctx.fillStyle = color;
+                ctx.font = '14px Arial';
+                ctx.fillText(label, endX + 5, endY + 5);
+            }
         }
 
-        function findNextTheta(currentTheta, targetArea, a, e) {
-            // Encontra o próximo ângulo que dará a área desejada
-            let theta2 = currentTheta;
-            let step = 0.01;
-            let currentArea = 0;
+        // Função auxiliar para atualizar as informações da área
+        function updateAreaInfo(area, time, sectorIndex) {
+            const areaInfoDiv = document.getElementById('areaInfo');
+            const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
+            const timeInSeconds = time / 1000;
+            const velocityMedia = area / timeInSeconds;
             
-            while (currentArea < targetArea && theta2 < currentTheta + 2 * Math.PI) {
-                theta2 += step;
-                currentArea = calculateEllipticalSectorArea(currentTheta, theta2, a, e);
-            }
+            const sectorInfo = `
+                <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;">
+                    <div style="display: flex; align-items: center;">
+                        <div style="width: 12px; height: 12px; background: ${sectorColors[sectorIndex]}; border-radius: 50%; margin-right: 10px;"></div>
+                        <strong>Setor ${sectorIndex + 1}</strong>
+                    </div>
+                    <div style="margin-left: 22px;">
+                        <div>Área: ${area.toFixed(0)} u²</div>
+                        <div>Tempo: ${timeInSeconds.toFixed(1)} s</div>
+                        <div>Velocidade média: ${velocityMedia.toFixed(1)} u²/s</div>
+                    </div>
+                </div>`;
             
-            return theta2;
-        }
-
-        function animateOrbit(a, e, T) {
-            let lastSectorTime = 0; // Adicionar esta variável para controlar o tempo do último setor
-
-            const canvas = document.getElementById('orbitCanvas');
-            const ctx = canvas.getContext('2d');
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            
-            // Cálculo dos parâmetros da órbita elíptica
-            const b = a * Math.sqrt(1 - e * e); // Semi-eixo menor
-            const c = a * e; // Distância do centro ao foco
-            
-            // Escala para visualização
-            const scale = 60;
-            const scaledA = a * scale;
-            const scaledB = b * scale;
-            const scaledC = c * scale;
-            
-            // Posicionar a estrela em um dos focos, garantindo que o centro da elipse esteja no centro do canvas
-            const starX = centerX - scaledC;
-            const starY = centerY;
-            
-            // Configurar o movimento em coordenadas polares
-            let trueAnomaly = 0;
-            const baseSpeed = (2 * Math.PI) / (T * 40); // Alterado de 100 para 60 para aumentar a velocidade
-            
-            // Armazenar o caminho da órbita - com centro da elipse no centro do canvas
-            const orbitPath = [];
-            for (let theta = 0; theta < 2 * Math.PI; theta += 0.01) {
-                // Coordenadas em relação ao centro da elipse
-                const x = centerX + scaledA * Math.cos(theta);
-                const y = centerY + scaledB * Math.sin(theta);
-                orbitPath.push({x, y});
-            }
-
-            // Variáveis para demonstração da segunda lei
-            let lastSampleTime = Date.now();
-            const maxSectors = 3; // Número de setores a serem mostrados
-            
-            // Calcular uma área fixa para todos os setores (baseada na área total da elipse)
-            const totalEllipseArea = Math.PI * scaledA * scaledB;
-            const fixedSectorArea = totalEllipseArea / 12; // Dividir em 12 setores (30 graus cada)
-            
-            // Função para calcular a anomalia verdadeira a partir da anomalia excêntrica
-            function trueAnomalyFromE(E) {
-                return 2 * Math.atan(Math.sqrt((1+e)/(1-e)) * Math.tan(E/2));
-            }
-            
-            // Função para calcular a anomalia excêntrica a partir da anomalia média (equação de Kepler)
-            function eccentricAnomaly(M) {
-                // Resolver a equação de Kepler iterativamente
-                let E = M; // Valor inicial
-                let delta = 1;
-                let iterations = 0;
-                
-                while (Math.abs(delta) > 1e-6 && iterations < 20) {
-                    delta = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-                    E = E - delta;
-                    iterations++;
-                }
-                
-                return E;
-            }
-            
-            // Função para calcular o ângulo necessário para varrer uma área específica a partir de um ângulo inicial
-            function calculateAngleForArea(startAngle, targetArea) {
-                // Para simplificação, usamos a área do setor e a relação entre ângulo e área na elipse
-                // A área de um setor elíptico é proporcional ao ângulo varrido
-                const totalArea = Math.PI * scaledA * scaledB;  // Área total da elipse
-                const angleForTargetArea = (targetArea / totalArea) * 2 * Math.PI;  // Proporção da área total
-                
-                return (startAngle + angleForTargetArea) % (2 * Math.PI);
-            }
-
-            let fixedTimeInterval = 3000; // Alterado para 3 segundos
-
-            function drawFrame() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Desenhar as estrelas no plano de fundo
-                for (const star of stars) {
-                    ctx.beginPath();
-                    ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-                    ctx.fill();
-                }
-                
-                // Desenhar a órbita completa
-                ctx.beginPath();
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-                ctx.lineWidth = 1;
-                for (let i = 0; i < orbitPath.length; i++) {
-                    if (i === 0) {
-                        ctx.moveTo(orbitPath[i].x, orbitPath[i].y);
-                    } else {
-                        ctx.lineTo(orbitPath[i].x, orbitPath[i].y);
-                    }
-                }
-                ctx.closePath();
-                ctx.stroke();
-                
-                // Desenhar o centro da elipse
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, 2, 0, 2 * Math.PI);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                ctx.fill();
-                
-                // Desenhar os focos
-                // Sol em um dos focos
-                ctx.beginPath();
-                ctx.arc(starX, starY, 8, 0, 2 * Math.PI);
-                ctx.fillStyle = 'yellow';
-                ctx.fill();
-                
-                // Brilho ao redor da estrela
-                const gradient = ctx.createRadialGradient(
-                    starX, starY, 8,
-                    starX, starY, 16
-                );
-                gradient.addColorStop(0, 'rgba(255, 255, 150, 0.8)');
-                gradient.addColorStop(1, 'rgba(255, 255, 150, 0)');
-                ctx.beginPath();
-                ctx.arc(starX, starY, 16, 0, 2 * Math.PI);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                // Outro foco
-                ctx.beginPath();
-                ctx.arc(centerX + scaledC, centerY, 3, 0, 2 * Math.PI);
-                ctx.fillStyle = 'red';
-                ctx.fill();
-                
-                // Desenhar os eixos
-                ctx.beginPath();
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-                ctx.setLineDash([5, 3]);
-                // Semi-eixo maior
-                ctx.moveTo(centerX - scaledA, centerY);
-                ctx.lineTo(centerX + scaledA, centerY);
-                // Semi-eixo menor
-                ctx.moveTo(centerX, centerY - scaledB);
-                ctx.lineTo(centerX, centerY + scaledB);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                
-                // Calcular posição do planeta usando equação paramétrica da elipse
-                // Usando o ângulo em relação ao centro da elipse (não ao foco)
-                const x = centerX + scaledA * Math.cos(trueAnomaly);
-                const y = centerY + scaledB * Math.sin(trueAnomaly);
-                
-                // Demonstração da Segunda Lei de Kepler (áreas iguais em tempos iguais)
-                if (showSecondLaw) {
-                    const currentTime = Date.now();
-                    
-                    if (currentTime >= nextSectorTime && sectorPoints.length < 2) {
-                        // Limpar conteúdo se for o primeiro ponto
-                        if (sectorPoints.length === 0) {
-                            const areaInfoDiv = document.getElementById('areaInfo');
-                            areaInfoDiv.innerHTML = `
-                                <h3>Demonstração da Segunda Lei de Kepler</h3>
-                                <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-                            `;
-                        }
-                        
-                        // Calcular e mostrar informações se já tivermos um ponto anterior
-                        if (sectorPoints.length > 0) {
-                            const prevPoint = sectorPoints[sectorPoints.length - 1];
-                            const area = calculateSectorArea(
-                                prevPoint.x, prevPoint.y,
-                                x, y,
-                                starX, starY,
-                                scaledA, scaledB,
-                                prevPoint.angle, trueAnomaly
-                            );
-                            
-                            const elapsedTime = (currentTime - prevPoint.startTime) / 1000;
-                            const velocityMedia = area / elapsedTime;
-                            
-                            const areaInfoDiv = document.getElementById('areaInfo');
-                            const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
-                            const sectorIndex = sectorPoints.length - 1;
-                            
-                            const sectorInfo = `
-                                <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;">
-                                    <div style="display: flex; align-items: center;">
-                                        <div style="width: 12px; height: 12px; background: ${sectorColors[sectorIndex]}; border-radius: 50%; margin-right: 10px;"></div>
-                                        <strong>Setor ${sectorIndex + 1}</strong>
-                                    </div>
-                                    <div style="margin-left: 22px;">
-                                        <div>Área: ${area.toFixed(0)} u²</div>
-                                        <div>Tempo: ${elapsedTime.toFixed(1)} s</div>
-                                        <div>Velocidade média: ${velocityMedia.toFixed(1)} u²/s</div>
-                                    </div>
-                                </div>`;
-                            
-                            const infoContainer = document.createElement('div');
-                            infoContainer.innerHTML = sectorInfo;
-                            areaInfoDiv.appendChild(infoContainer);
-                        }
-                        
-                        // Adicionar novo ponto
-                        sectorPoints.push({
-                            x: x,
-                            y: y,
-                            angle: trueAnomaly,
-                            startTime: currentTime
-                        });
-                        
-                        if (sectorPoints.length === 2) {
-                            lastSectorTime = Date.now(); // Marcar o momento em que o segundo setor foi criado
-                        }
-                        
-                        nextSectorTime = currentTime + fixedTimeInterval;
-                    }
-                }
-                
-                // Limpar os setores após completar o ciclo
-                if (showSecondLaw && sectorPoints.length >= 3 && Date.now() > nextSectorTime + fixedTimeInterval) {
-                    sectorPoints = [];
-                    nextSectorTime = Date.now();
-                    const areaInfoDiv = document.getElementById('areaInfo');
-                    areaInfoDiv.innerHTML = `
-                        <h3>Demonstração da Segunda Lei de Kepler</h3>
-                        <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-                    `;
-                }
-
-                // Desenhar o planeta
-                ctx.beginPath();
-                ctx.arc(x, y, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = '#3498db';
-                ctx.fill();
-                
-                // Resetar os pontos após completar 3 setores e um intervalo adicional
-                if (showSecondLaw && sectorPoints.length >= 3 && Date.now() > nextSectorTime + fixedTimeInterval) {
-                    sectorPoints = [];
-                    nextSectorTime = Date.now();
-                }
-
-                // Calcular distância do planeta ao sol para a velocidade
-                const distanceFromSun = Math.sqrt(Math.pow(x - starX, 2) + Math.pow(y - starY, 2));
-                
-                // Calcular a velocidade orbital usando a versão simplificada da equação de Kepler
-                // v ∝ √(1/r)  onde r é a distância ao Sol
-                const perihelionDistance = scaledA * (1 - e); // Menor distância ao Sol
-                const aphelionDistance = scaledA * (1 + e);   // Maior distância ao Sol
-                const perihelionVelocity = Math.sqrt(1 / perihelionDistance);
-                const currentVelocity = Math.sqrt(1 / distanceFromSun);
-                
-                // Normalizar a velocidade em relação à velocidade no periélio
-                const relativeVelocity = currentVelocity / perihelionVelocity;
-                
-                // Ajustar a velocidade angular baseada na velocidade orbital
-                const angularSpeed = baseSpeed * relativeVelocity;
-                
-                // Desenhar uma pequena cauda para mostrar o movimento
-                const prevAnomaly = trueAnomaly - angularSpeed;
-                const prevX = centerX + scaledA * Math.cos(prevAnomaly);
-                const prevY = centerY + scaledB * Math.sin(prevAnomaly);
-                
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(prevX, prevY);
-                ctx.strokeStyle = 'rgba(52, 152, 219, 0.5)';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                
-                // Mostrar velocidade relativa
-                ctx.fillStyle = 'rgba(255,255,255,0.7)';
-                ctx.font = '12px Arial';
-                const speedText = `${relativeVelocity.toFixed(2)}x`;
-                ctx.fillText(speedText, x + 10, y - 10);
-
-                trueAnomaly += angularSpeed;
-                if (trueAnomaly >= 2 * Math.PI) {
-                    trueAnomaly = 0;
-                }
-                
-                // Calcular e armazenar áreas quando estivermos mostrando a segunda lei
-                if (showSecondLaw) {
-                    const currentTime = Date.now();
-                    
-                    if (currentTime >= nextSectorTime && sectorPoints.length < 3) {
-                        // Calcular a área do setor se já tivermos um ponto anterior
-                        if (sectorPoints.length > 0) {
-                            const prevPoint = sectorPoints[sectorPoints.length - 1];
-                            const area = calculateSectorArea(
-                                prevPoint.x, prevPoint.y,
-                                x, y,
-                                starX, starY,
-                                scaledA, scaledB,
-                                prevPoint.angle, trueAnomaly
-                            );
-                            
-                            // Atualizar o elemento HTML com as informações do setor
-                            const areaInfoDiv = document.getElementById('areaInfo');
-                            const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
-                            const sectorIndex = sectorPoints.length - 1;
-                            
-                            const elapsedTime = (currentTime - prevPoint.startTime) / 1000; // Tempo em segundos
-                            const velocityMedia = area / elapsedTime;
-                            
-                            // Criar uma string formatada com as informações
-                            const sectorInfo = `
-                                <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;">
-                                    <div style="display: flex; align-items: center;">
-                                        <div style="width: 12px; height: 12px; background: ${sectorColors[sectorIndex]}; border-radius: 50%; margin-right: 10px;"></div>
-                                        <strong>Setor ${sectorIndex + 1}</strong>
-                                    </div>
-                                    <div style="margin-left: 22px;">
-                                        <div>Área: ${area.toFixed(0)} u²</div>
-                                        <div>Tempo: ${elapsedTime.toFixed(1)} s</div>
-                                        <div>Velocidade média: ${velocityMedia.toFixed(1)} u²/s</div>
-                                    </div>
-                                </div>`;
-                            
-                            // Limpar conteúdo anterior se for o primeiro setor
-                            if (sectorIndex === 0) {
-                                areaInfoDiv.innerHTML = `
-                                    <h3>Demonstração da Segunda Lei de Kepler</h3>
-                                    <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-                                `;
-                            }
-                            
-                            // Adicionar as informações ao painel
-                            const infoContainer = document.createElement('div');
-                            infoContainer.innerHTML = sectorInfo;
-                            areaInfoDiv.appendChild(infoContainer);
-                        }
-                        
-                        sectorPoints.push({
-                            x: x,
-                            y: y,
-                            angle: trueAnomaly % (2 * Math.PI), // Garantir que o ângulo está em radianos e normalizado
-                            startTime: currentTime
-                        });
-                        
-                        nextSectorTime = currentTime + fixedTimeInterval;
-                    }
-                }
-
-                // Desenhar os setores existentes
-                if (showSecondLaw) {
-                    for (let i = 0; i < sectorPoints.length - 1; i++) {
-                        const startPoint = sectorPoints[i];
-                        const endPoint = sectorPoints[i + 1];
-                        const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
-                        
-                        // Desenhar o setor elíptico
-                        ctx.beginPath();
-                        ctx.moveTo(starX, starY);
-                        ctx.lineTo(startPoint.x, startPoint.y);
-                        
-                        // Desenhar o arco elíptico
-                        let startAngle = startPoint.angle;
-                        let endAngle = endPoint.angle;
-                        if (endAngle < startAngle) endAngle += 2 * Math.PI;
-                        
-                        ctx.ellipse(
-                            centerX, centerY,
-                            scaledA, scaledB,
-                            0,
-                            startAngle,
-                            endAngle
-                        );
-                        
-                        ctx.lineTo(starX, starY);
-                        ctx.fillStyle = sectorColors[i] + '4D'; // Adiciona 30% de transparência
-                        ctx.fill();
-                        ctx.strokeStyle = sectorColors[i];
-                        ctx.stroke();
-                    }
-                }
-
-                // Remover o código duplicado de reset e manter apenas uma verificação
-                if (showSecondLaw && sectorPoints.length === 2 && Date.now() > lastSectorTime + 8000) {
-                    sectorPoints = [];
-                    nextSectorTime = Date.now();
-                    lastSectorTime = 0;
-                    const areaInfoDiv = document.getElementById('areaInfo');
-                    areaInfoDiv.innerHTML = `
-                        <h3>Demonstração da Segunda Lei de Kepler</h3>
-                        <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
-                    `;
-                }
-
-                animationId = requestAnimationFrame(drawFrame);
-            }
-            
-            // Função para calcular a área do setor elíptico
-            function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
-                // Normalizar os ângulos para garantir que angle2 > angle1
-                while (angle2 < angle1) angle2 += 2 * Math.PI;
-                
-                // Usar a fórmula correta para área do setor elíptico
-                // A = (ab/2) * (theta - e*sin(theta))
-                // onde theta é o ângulo entre os pontos
-                // e e é a excentricidade
-                const e = Math.sqrt(1 - (b*b)/(a*a)); // excentricidade
-                const deltaTheta = angle2 - angle1;
-                const area = (a * b / 2) * (deltaTheta - e * (Math.sin(angle2) - Math.sin(angle1)));
-                
-                return Math.abs(area);
-            }
-            
-            // Função para interpolar pontos entre dois pontos da órbita
-            function interpolatePoints(p1, p2, t) {
-                return {
-                    x: p1.x + (p2.x - p1.x) * t,
-                    y: p1.y + (p2.y - p1.y) * t,
-                    angle: p1.angle + (p2.angle - p1.angle) * t
-                };
-            }
-
-            // Função melhorada para calcular a área do setor elíptico usando radianos
-            function calculateSectorArea(x1, y1, x2, y2, fx, fy, a, b, angle1, angle2) {
-                // Garantir precisão double e conversão para radianos
-                angle1 = Number(angle1) % (2 * Math.PI);
-                angle2 = Number(angle2) % (2 * Math.PI);
-                a = Number(a);
-                b = Number(b);
-                
-                // Normalizar ângulos mantendo-os em radianos
-                if (angle2 < angle1) {
-                    angle2 += 2.0 * Math.PI;
-                }
-                
-                // Método de Simpson com mais pontos de integração
-                const n = 100; // Aumentado para maior precisão
-                const h = (angle2 - angle1) / n;
-                let sum = 0.0;
-                
-                for (let i = 0; i <= n; i++) {
-                    const theta = angle1 + i * h;
-                    // Calcular o raio usando a equação paramétrica da elipse
-                    const r = (a * b) / Math.sqrt(
-                        Math.pow(b * Math.cos(theta), 2.0) + 
-                        Math.pow(a * Math.sin(theta), 2.0)
-                    );
-                    
-                    // Aplicar a regra de Simpson com coeficientes precisos
-                    const coef = (i === 0 || i === n) ? 1.0 : (i % 2 === 0 ? 2.0 : 4.0);
-                    sum += coef * 0.5 * r * r;
-                }
-                
-                // Calcular a área final
-                const area = Math.abs((h / 3.0) * sum);
-                return area;
-            }
-
-            // Modificar a parte que calcula e mostra os setores
-            if (showSecondLaw) {
-                const currentTime = Date.now();
-                const samplingRate = 60; // 60 Hz de amostragem
-                const numInterpolations = 5; // Pontos interpolados entre cada par de pontos
-                
-                if (currentTime >= nextSectorTime && sectorPoints.length < 3) {
-                    if (sectorPoints.length > 0) {
-                        const prevPoint = sectorPoints[sectorPoints.length - 1];
-                        let totalArea = 0.0;
-                        
-                        // Calcular área usando pontos interpolados
-                        for (let i = 0; i < numInterpolations; i++) {
-                            const t1 = i / numInterpolations;
-                            const t2 = (i + 1) / numInterpolations;
-                            const p1 = interpolatePoints(prevPoint, {x, y, angle: trueAnomaly}, t1);
-                            const p2 = interpolatePoints(prevPoint, {x, y, angle: trueAnomaly}, t2);
-                            
-                            totalArea += calculateSectorArea(
-                                p1.x, p1.y,
-                                p2.x, p2.y,
-                                starX, starY,
-                                scaledA, scaledB,
-                                p1.angle, p2.angle
-                            );
-                        }
-                        
-                        // Atualizar display com maior precisão
-                        const elapsedTime = (currentTime - prevPoint.startTime) / 1000.0;
-                        const velocityMedia = totalArea / elapsedTime;
-                        
-                        updateSectorInfo(totalArea, elapsedTime, velocityMedia, sectorPoints.length - 1);
-                    }
-                    
-                    // Armazenar com maior precisão
-                    sectorPoints.push({
-                        x: Number(x),
-                        y: Number(y),
-                        angle: Number(trueAnomaly),
-                        startTime: Number(currentTime)
-                    });
-                }
-            }
-            
-            drawFrame();
-        }
-        
-        // Função para atualizar a tabela de informações das áreas
-        function updateAreaTable() {
-            if (!showSecondLaw || sectorPoints.length < 2) return;
-            
-            const table = document.getElementById('areaMeasurements');
-            // Limpar linhas anteriores exceto o cabeçalho
-            while (table.rows.length > 1) {
-                table.deleteRow(1);
-            }
-            
-            // Adicionar dados de cada setor
-            for (let i = 0; i < sectorPoints.length - 1; i++) {
-                const startPoint = sectorPoints[i];
-                const endPoint = sectorPoints[i + 1];
-                
-                // Calcular a área do setor triangular
-                const dx1 = startPoint.x - starX;
-                const dy1 = startPoint.y - starY;
-                const dx2 = endPoint.x - starX;
-                const dy2 = endPoint.y - starY;
-                const area = Math.abs(dx1 * dy2 - dx2 * dy1) / 2;
-                
-                const timeDiff = ((endPoint.time - startPoint.time) / 1000).toFixed(1);
-                const velocity = (Math.sqrt(Math.pow(endPoint.x - startPoint.x, 2) + 
-                                           Math.pow(endPoint.y - startPoint.y, 2)) / parseFloat(timeDiff)).toFixed(1);
-                
-                const sectorColors = ["#FFB74D", "#64B5F6", "#F06292"];
-                
-                const row = table.insertRow();
-                row.innerHTML = `
-                    <td>
-                        <div class="equal-area-indicator" style="background-color: ${sectorColors[i]}"></div>
-                        Setor ${i + 1}
-                    </td>
-                    <td>${(area).toFixed(0)} u²</td>
-                    <td>${timeDiff} s</td>
-                    <td>${velocity} u/s</td>
+            if (sectorIndex === 0) {
+                areaInfoDiv.innerHTML = `
+                    <h3>Demonstração da Segunda Lei de Kepler</h3>
+                    <p>As áreas dos setores são <strong>iguais</strong> para tempos iguais, independente da posição na órbita.</p>
                 `;
             }
+            
+            areaInfoDiv.innerHTML += sectorInfo;
         }
-        
-        // Iniciar simulação quando a página carregar
-        window.onload = function() {
-            generateStars(100); // Gerar 100 estrelas
-            startSimulation();
-            const infoElement = document.querySelector('.info');
-            console.log('Altura da caixa de informações:', infoElement.offsetHeight + 'px');
-        };
     </script>
 
     <!-- Footer com Créditos -->
