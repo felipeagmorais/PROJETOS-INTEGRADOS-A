@@ -482,31 +482,35 @@
             if (showVectors) {
                 const dx = x - rightFocusX;
                 const dy = y - centerY;
-                const r = Math.sqrt(dx*dx + dy*dy) / scale; // Converter para UA real
+                const r = Math.sqrt(dx*dx + dy*dy) / scale;
                 
                 // Calcular momento angular (constante)
                 const L = Math.sqrt(a * (1 - e*e));
-                
-                // Velocidade a partir do momento angular
                 const speed = L/r;
                 
-                // Calcular componentes do vetor velocidade
-                const vx = -speed * dy / (r * scale); // Ajustar para escala da tela
-                const vy = speed * dx / (r * scale);
+                // Calcular direção tangente à elipse
+                const dx_dt = -scaledA * Math.sin(E);
+                const dy_dt = scaledB * Math.cos(E);
                 
-                // Ajustar o tamanho do vetor velocidade para visualização
-                const vectorScale = 5;
-                drawVector(ctx, x, y, x + vx/vectorScale, y + vy/vectorScale, '#4CAF50', 'v');
+                // Normalizar o vetor tangente e ajustar comprimento pela velocidade
+                const tangentMagnitude = Math.sqrt(dx_dt*dx_dt + dy_dt*dy_dt);
+                const velocityScale = 20; // Fator base para escala visual
+                const velocityVectorLength = velocityScale * (speed / L * a); // Comprimento proporcional à velocidade
+                const velocityEndX = x + velocityVectorLength * (dx_dt / tangentMagnitude);
+                const velocityEndY = y + velocityVectorLength * (dy_dt / tangentMagnitude);
                 
-                // Vetor força gravitacional com escala reduzida
-                const forceMagnitude = 5 / (r * r); // Reduzido de 40 para 15
+                // Desenhar vetor velocidade
+                drawVector(ctx, x, y, velocityEndX, velocityEndY, '#4CAF50', 'v');
+                
+                // Vetor força gravitacional
+                const forceMagnitude = 5 / (r * r);
                 const forceX = -dx / r * forceMagnitude;
                 const forceY = -dy / r * forceMagnitude;
                 drawVector(ctx, x, y, x + forceX, y + forceY, '#FF4444', 'F');
                 
                 // Calcular velocidades máxima e mínima
-                const vmax = L/(a * (1 - e)); // Velocidade no periélio
-                const vmin = L/(a * (1 + e)); // Velocidade no afélio
+                const vmax = L/(a * (1 - e));
+                const vmin = L/(a * (1 + e));
                 
                 const velocityPercent = ((speed - vmin) / (vmax - vmin) * 100).toFixed(0);
                 const arrow = speed > L/a ? '↑' : '↓';
