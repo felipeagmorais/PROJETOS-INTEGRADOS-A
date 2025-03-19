@@ -639,8 +639,24 @@
                 if (i < sectorPoints.length - 1) {
                     ctx.beginPath();
                     ctx.moveTo(orbitData.starX, orbitData.centerY);
-                    ctx.lineTo(point.x, point.y);
-                    ctx.lineTo(sectorPoints[i+1].x, sectorPoints[i+1].y);
+                    
+                    // Calcular ângulos inicial e final para o arco
+                    const angle1 = Math.atan2(point.y - orbitData.centerY, point.x - orbitData.centerX);
+                    const angle2 = Math.atan2(sectorPoints[i+1].y - orbitData.centerY, 
+                                            sectorPoints[i+1].x - orbitData.centerX);
+                    
+                    // Salvar contexto para aplicar transformação
+                    ctx.save();
+                    ctx.translate(orbitData.centerX, orbitData.centerY);
+                    ctx.scale(orbitData.scaledA/orbitData.scaledB, 1);
+                    
+                    // Desenhar o arco elíptico
+                    ctx.arc(0, 0, orbitData.scaledB, angle1, angle2, false);
+                    
+                    // Restaurar contexto
+                    ctx.restore();
+                    
+                    ctx.lineTo(orbitData.starX, orbitData.centerY);
                     ctx.closePath();
                     
                     // Cor baseada na velocidade (vermelho=rápido, azul=lento)
