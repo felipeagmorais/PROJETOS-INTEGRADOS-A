@@ -347,6 +347,7 @@
         let animationId;
         const stars = [];
         let sectorPoints = [];
+        let sectorAreas = [];  // Novo array para armazenar as áreas
         let nextSectorTime = Date.now();
         let showSecondLaw = false;
         let startTime = Date.now();
@@ -365,7 +366,7 @@
         }
 
         function drawVector(ctx, startX, startY, endX, endY, color, label) {
-            const angle = Math.atan2(endY - startY, endX - startX);
+            const angle = Math.atan2(endY - startY);
             const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
             const headLength = Math.min(15, length * 0.3);
             const headAngle = Math.PI / 6;
@@ -534,42 +535,161 @@
             return { centerX, centerY, starX: rightFocusX, scaledA, scaledB, x, y };
         }
 
-        function drawOrbitWithAreas(ctx, canvas, a, e, showAreas) {
-            const orbitData = drawOrbit(ctx, canvas, a, e, false); // false para não mostrar vetores
-            const currentTime = Date.now();
+        function calculateEllipticalSectorArea(starX, centerY, x1, y1, x2, y2, a, b, e) {
+            // Converter para coordenadas relativas ao foco (estrela)
+            const dx1 = x1 - starX;
+            const dy1 = y1 - centerY;
+            const dx2 = x2 - starX;
+            const dy2 = y2 - centerY;
             
-            if (showAreas && currentTime >= nextSectorTime && sectorPoints.length < 3) {
+            // Calcular anomalia verdadeira para cada ponto
+            let f1 = Math.atan2(dy1, dx1);
+            let f2 = Math.atan2(dy2, dx2);
+            
+            // Ajustar ângulos para garantir movimento contínuo
+            if (f2 < f1) f2 += 2 * Math.PI;
+            
+            // Usar a constante da área (segunda lei de Kepler)
+            const L = Math.sqrt(a * (1 - e*e)); // Momento angular específico
+            const mu = 4 * Math.PI * Math.PI; // Parâmetro gravitacional (em UA³/ano²)
+            
+            // Calcular área usando a constante da área
+            const dt = Math.abs(f2 - f1) * a * b / (2 * L);
+            const area = 0.5 * L * dt;
+            
+            return area;
+        }
+
+        const mu = 4 * Math.PI * Math.PI; // Parâmetro gravitacional (UA³/ano²)
+
+        function drawOrbitWithAreas(ctx, canvas, a, e, showAreas) {
+            // Limpar canvas e desenhar fundo
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Desenhar estrelas de fundo
+            for (const star of stars) {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                ctx.fill();
+            }
+
+            const orbitData = drawOrbit(ctx, canvas, a, e, false);
+            const currentTime = Date.now();
+            const elapsedTime = (currentTime - startTime) / 1000;
+            const b = a * Math.sqrt(1 - e * e);
+
+            // Desenhar a órbita
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.ellipse(orbitData.centerX, orbitData.centerY, orbitData.scaledA, orbitData.scaledB, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            // Desenhar Sol
+            ctx.beginPath();
+            ctx.arc(orbitData.starX, orbitData.centerY, 8, 0, 2 * Math.PI);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+
+            // Glow do Sol
+            const gradient = ctx.createRadialGradient(
+                orbitData.starX, orbitData.centerY, 8,
+                orbitData.starX, orbitData.centerY, 16
+            );
+            gradient.addColorStop(0, 'rgba(255, 255, 150, 0.8)');
+            gradient.addColorStop(1, 'rgba(255, 255, 150, 0)');
+            ctx.beginPath();
+            ctx.arc(orbitData.starX, orbitData.centerY, 16, 0, 2 * Math.PI);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // Calcular parâmetros necessários
+            const dx = orbitData.x - orbitData.starX;
+            const dy = orbitData.y - orbitData.centerY;
+            const r = Math.sqrt(dx*dx + dy*dy) / scale;
+            const L = Math.sqrt(a * (1 - e*e));
+
+            // Sistema de setores de tempo igual
+            if (!sectorPoints) sectorPoints = [];
+            if (!sectorAreas) sectorAreas = [];
+            
+            // Adicionar novo ponto a cada intervalo
+            if (Math.floor(elapsedTime * 2) > Math.floor((lastElapsedTime || 0) * 2)) {
                 sectorPoints.push({
                     x: orbitData.x,
                     y: orbitData.y,
-                    time: currentTime
+                    time: currentTime,
+                    v: L/r
                 });
-                nextSectorTime = currentTime + 3000; // 3 segundos entre setores
-            }
-
-            // Desenhar setores
-            if (showAreas && sectorPoints.length > 0) {
-                const colors = ['rgba(255, 183, 77, 0.3)', 'rgba(100, 181, 246, 0.3)', 'rgba(240, 98, 146, 0.3)'];
                 
-                for (let i = 0; i < sectorPoints.length - 1; i++) {
-                    ctx.beginPath();
-                    ctx.moveTo(orbitData.starX, orbitData.centerY);
-                    ctx.lineTo(sectorPoints[i].x, sectorPoints[i].y);
-                    ctx.lineTo(sectorPoints[i + 1].x, sectorPoints[i + 1].y);
-                    ctx.closePath();
-                    ctx.fillStyle = colors[i];
-                    ctx.fill();
-                    ctx.strokeStyle = colors[i].replace('0.3', '1');
-                    ctx.stroke();
+                if (sectorPoints.length > 1) {
+                    const area = L * 0.25; // Área varrida em meio segundo
+                    sectorAreas.push(area);
+                }
+                
+                // Limitar número de setores
+                if (sectorPoints.length > 8) {
+                    sectorPoints.shift();
+                    sectorAreas.shift();
                 }
             }
 
-            // Resetar setores após completar
-            if (sectorPoints.length >= 3 && currentTime > nextSectorTime) {
-                sectorPoints = [];
-                nextSectorTime = currentTime;
-            }
+            // Desenhar todos os setores acumulados
+            sectorPoints.forEach((point, i) => {
+                if (i < sectorPoints.length - 1) {
+                    ctx.beginPath();
+                    ctx.moveTo(orbitData.starX, orbitData.centerY);
+                    ctx.lineTo(point.x, point.y);
+                    ctx.lineTo(sectorPoints[i+1].x, sectorPoints[i+1].y);
+                    ctx.closePath();
+                    
+                    // Cor baseada na velocidade (vermelho=rápido, azul=lento)
+                    const v = point.v;
+                    const vmax = L/(a*(1-e));
+                    const vmin = L/(a*(1+e));
+                    const t = (v - vmin)/(vmax - vmin);
+                    ctx.fillStyle = `rgba(${255*t}, 100, ${255*(1-t)}, 0.3)`;
+                    ctx.fill();
+                    
+                    // Mostrar área do setor
+                    const centerX = (point.x + sectorPoints[i+1].x)/2;
+                    const centerY = (point.y + sectorPoints[i+1].y)/2;
+                    ctx.font = '12px Poppins';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`${sectorAreas[i].toFixed(3)} UA²`, centerX, centerY);
+                }
+            });
+            
+            // Mostrar informações didáticas
+            document.getElementById('areaInfo').innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 10px;">
+                    Segunda Lei de Kepler
+                </div>
+                <div class="parameter-box">
+                    <div>Área por segundo:</div>
+                    <div>${(L/2).toFixed(3)} UA²/s</div>
+                    <div style="font-size: 0.8em; color: #64ffda">(constante)</div>
+                </div>
+                <div class="parameter-box">
+                    <div>Velocidade atual:</div>
+                    <div>${(L/Math.sqrt(dx*dx + dy*dy)).toFixed(2)} UA/ano</div>
+                    <div style="font-size: 0.8em; color: #64ffda">
+                        ${sectorPoints.length > 0 ? '✓ Área constante' : 'Aguardando...'}
+                    </div>
+                </div>
+            `;
+            
+            lastElapsedTime = elapsedTime;
+
+            // Depois de desenhar os setores, desenhar o planeta
+            ctx.beginPath();
+            ctx.arc(orbitData.x, orbitData.y, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = '#3498db';
+            ctx.fill();
         }
+
+        let currentE = 0; // Variável global para rastrear a última posição
 
         function drawOrbitWithPeriod(ctx, canvas, a, e, T) {
             const orbitData = drawOrbit(ctx, canvas, a, e, false); // false para não mostrar vetores
@@ -618,11 +738,34 @@
             canvas.height = canvas.offsetHeight;
             const ctx = canvas.getContext('2d');
             generateStars(100, canvas);
-            showSecondLaw = true;
+            startTime = Date.now();
+            sectorPoints = [];
+            sectorAreas = [];
+            lastElapsedTime = 0;
+            
+            const axis2 = document.getElementById('axis2');
+            const ecc2 = document.getElementById('eccentricity2');
+            const axisValue2 = document.getElementById('axisValue2');
+            const eccValue2 = document.getElementById('eccentricityValue2');
+            
+            axis2.addEventListener('input', function() {
+                axisValue2.textContent = parseFloat(this.value).toFixed(1);
+                startTime = Date.now(); // Resetar ao mudar parâmetros
+                sectorPoints = [];
+                sectorAreas = [];
+            });
+            
+            ecc2.addEventListener('input', function() {
+                eccValue2.textContent = parseFloat(this.value).toFixed(1);
+                startTime = Date.now(); // Resetar ao mudar parâmetros
+                sectorPoints = [];
+                sectorAreas = [];
+            });
             
             function animate() {
-                const a = parseFloat(document.getElementById('axis2').value);
-                const e = parseFloat(document.getElementById('eccentricity2').value);
+                const a = parseFloat(axis2.value);
+                const e = parseFloat(ecc2.value);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 drawOrbitWithAreas(ctx, canvas, a, e, true);
                 animationId = requestAnimationFrame(animate);
             }
