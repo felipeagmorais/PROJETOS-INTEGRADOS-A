@@ -776,9 +776,10 @@
             <div class="timeline-content">
                 <h2>1609 - Astronomia Nova: Primeira e Segunda Leis</h2>
                 <p>Publicação da "Astronomia Nova", apresentando suas duas primeiras leis do movimento planetário após uma década de cálculos intensos.</p>
-                <img src="assets/leis/astronomia-nova-cover.svg" 
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Astronomia_Nova.jpg/300px-Astronomia_Nova.jpg" 
                      alt="Astronomia Nova" 
                      class="historical-image"
+                     width="300" height="426"
                      onclick="showImageDetail('Astronomia Nova', 'Página de título da obra revolucionária de Kepler que apresentou suas duas primeiras leis do movimento planetário.')">
                 <div class="laws-container">
                     <div class="interactive-element" onclick="showLawDetails(1)">
@@ -828,9 +829,10 @@
             <div class="timeline-content">
                 <h2>1687 - Newton e a Gravitação Universal</h2>
                 <p>Isaac Newton publica "Principia Mathematica", unificando as leis de Kepler em sua teoria da gravidade e explicando-as matematicamente.</p>
-                <img src="assets/historicos/isaac-newton.svg" 
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/GodfreyKneller-IsaacNewton-1689.jpg/300px-GodfreyKneller-IsaacNewton-1689.jpg" 
                      alt="Isaac Newton" 
                      class="historical-image"
+                     width="300" height="376"
                      onclick="showImageDetail('Isaac Newton', 'Sir Isaac Newton, que usou as leis de Kepler como evidência para sua teoria da gravitação universal, formulando as leis matemáticas que explicam o movimento dos corpos celestes.')">
                 <div class="didactic-note">
                     <strong>Conexão Científica:</strong> Newton reconheceu que sua lei da gravitação universal explicava matematicamente as leis empíricas de Kepler.
@@ -844,10 +846,10 @@
             <!-- As imagens serão adicionadas via JavaScript -->
         </div>
     </div>
-
-    <div class="interactive-map">
-        <!-- Pontos do mapa serão adicionados via JavaScript -->
-    </div>    <h2 class="section-title">As Três Leis de Kepler: Explicação Detalhada</h2>
+    <div style="margin: 100px 0;">
+        <hr style="border: 1px solid #64ffda; margin: 40px 0;">
+    </div>
+    <h2 class="section-title">As Três Leis de Kepler: Explicação Detalhada</h2>
     
     <div class="laws-detailed-section">
         <div class="law-detailed" id="first-law">
@@ -860,9 +862,6 @@
                     <p class="law-statement">"Todos os planetas se movem em órbitas elípticas, com o Sol ocupando um dos focos da elipse."</p>
                     <p>Esta lei revolucionou a astronomia ao abandonar o conceito de órbitas circulares perfeitas, uma crença que persistia desde a antiguidade. Kepler precisou de anos de cálculos matemáticos para chegar a esta conclusão, analisando meticulosamente os precisos dados de Tycho Brahe sobre o movimento de Marte.</p>
                     <p><strong>Implicações:</strong> Ao demonstrar que as órbitas são elípticas e não circulares, Kepler eliminou a necessidade dos epiciclos complexos do modelo ptolomaico, simplificando drasticamente nossa compreensão do sistema solar.</p>
-                    <div class="interactive-element" onclick="demonstrateEllipse()">
-                        Demonstração Interativa: Como Construir uma Elipse
-                    </div>
                 </div>
             </div>
         </div>
@@ -877,9 +876,6 @@
                     <p class="law-statement">"Uma linha traçada do Sol a um planeta varre áreas iguais em tempos iguais."</p>
                     <p>Esta lei explica por que os planetas se movem mais rápido quando estão mais próximos do Sol (periélio) e mais devagar quando estão mais distantes (afélio). É uma expressão da conservação do momento angular, princípio que seria mais tarde explicado por Newton.</p>
                     <p><strong>Aplicação:</strong> Essa lei permite-nos calcular com precisão a posição de um planeta em qualquer ponto de sua órbita se conhecermos sua posição inicial, velocidade e a forma de sua órbita.</p>
-                    <div class="interactive-element" onclick="demonstrateSecondLaw()">
-                        Demonstração Interativa: Velocidade Orbital Variável
-                    </div>
                 </div>
             </div>
         </div>
@@ -895,53 +891,12 @@
                     <p>Matematicamente expressa como: P² ∝ a³, onde P é o período orbital e a é o semi-eixo maior da órbita elíptica.</p>
                     <p>Kepler descobriu esta lei enquanto buscava harmonia matemática no sistema solar, uma "música das esferas". Esta lei permite comparar as órbitas de diferentes planetas e calcular distâncias relativas no sistema solar.</p>
                     <p><strong>Impacto:</strong> Esta lei foi crucial para estabelecer as verdadeiras dimensões do sistema solar e é utilizada até hoje na astronomia para calcular as órbitas de planetas em outros sistemas solares.</p>
-                    <div class="interactive-element" onclick="demonstrateThirdLaw()">
-                        Demonstração Interativa: Calculadora da Lei Harmônica
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <h2 class="section-title">Atividades Práticas: Experimente Você Mesmo</h2>
-    
-    <div class="experiment-section">
-        <div class="experiment-card" onclick="startExperiment('ellipse')">
-            <h3>Experimento 1: Construindo uma Elipse</h3>
-            <p class="experiment-description">Usando apenas um barbante, dois pregos (que representam os focos) e um lápis, você pode desenhar uma elipse perfeita, demonstrando a primeira lei de Kepler.</p>
-            <div class="experiment-materials">
-                <strong>Materiais:</strong> Barbante, dois pregos, papelão, lápis.
-            </div>
-            <img src="assets/leis/ellipse-construction.gif" alt="Construção de Elipse" class="experiment-image">
-        </div>
-        
-        <div class="experiment-card" onclick="startExperiment('area')">
-            <h3>Experimento 2: Visualizando a Lei das Áreas</h3>
-            <p class="experiment-description">Usando um simulador online, observe como um planeta varre áreas iguais em tempos iguais, mesmo quando sua velocidade varia.</p>
-            <div class="experiment-materials">
-                <strong>Recursos:</strong> Acesso ao simulador no navegador.
-            </div>
-            <img src="assets/leis/equal-areas-animation.gif" alt="Lei das Áreas" class="experiment-image">
-        </div>
-        
-        <div class="experiment-card" onclick="startExperiment('harmony')">
-            <h3>Experimento 3: Lei Harmônica em Ação</h3>
-            <p class="experiment-description">Compare os períodos orbitais dos planetas de nosso sistema solar e verifique se eles seguem a terceira lei de Kepler usando uma calculadora interativa.</p>
-            <div class="experiment-materials">
-                <strong>Recursos:</strong> Tabela de dados planetários, calculadora.
-            </div>
-
-        </div>
-        
-        <div class="experiment-card" onclick="startExperiment('modern')">
-            <h3>Experimento 4: Kepler na Astronomia Moderna</h3>
-            <p class="experiment-description">Saiba como as leis de Kepler são usadas hoje para detectar exoplanetas e determinar suas órbitas ao redor de outras estrelas.</p>
-            <div class="experiment-materials">
-                <strong>Recursos:</strong> Dados da NASA, simulador de exoplanetas.
-            </div>
-
-        </div>
-    </div>    <h2 class="section-title">Legado de Kepler: Impacto na Ciência Moderna</h2>
+    <h2 class="section-title">Legado de Kepler: Impacto na Ciência Moderna</h2>
     
     <div class="legacy-section">
         <div class="legacy-item">
@@ -1545,18 +1500,6 @@
             });
         }
         
-        // Funções de demonstração para as leis de Kepler
-        function demonstrateEllipse() {
-            alert("Esta seria uma demonstração interativa de como construir uma elipse usando o método dos dois focos.");
-        }
-        
-        function demonstrateSecondLaw() {
-            alert("Esta seria uma demonstração animada da segunda lei de Kepler, mostrando como a velocidade orbital varia em diferentes pontos da órbita.");
-        }
-        
-        function demonstrateThirdLaw() {
-            alert("Esta seria uma calculadora interativa da terceira lei de Kepler, permitindo comparar diferentes planetas do sistema solar.");
-        }
 
         // Função para iniciar experimentos virtuais
         function startExperiment(type) {
@@ -1767,7 +1710,7 @@
                     'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Tycho_Brahe.JPG/300px-Tycho_Brahe.JPG',
                     'assets/sistemas/mars-orbit.svg',
                     'assets/sistemas/ptolemaic-system.svg',
-                    'assets/obras/astronomia-nova-cover.svg'
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Astronomia_Nova.jpg/300px-Astronomia_Nova.jpg'
                 ];
                 
                 const container = document.querySelector('.gallery-container');

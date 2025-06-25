@@ -32,7 +32,7 @@ $urlMappings = @{
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Kepler_third_law_plot.svg/600px-Kepler_third_law_plot.svg.png" = "assets/leis/third-law-graph.svg"
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Ellipse_drawing.gif/600px-Ellipse_drawing.gif" = "assets/leis/ellipse-construction.gif"
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Kepler_law2_areas.gif/600px-Kepler_law2_areas.gif" = "assets/leis/equal-areas-animation.gif"
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Astronomia_nova_title_page.jpg/500px-Astronomia_nova_title_page.jpg" = "assets/leis/astronomia-nova-cover.svg"
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Astronomia_Nova.jpg/300px-Astronomia_Nova.jpg" = "assets/leis/astronomia-nova-cover.svg"
     
     # Aplicações Modernas (3 essenciais)
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Newton_gravitation_pull.svg/600px-Newton_gravitation_pull.svg.png" = "assets/modernas/universal-gravitation.svg"
