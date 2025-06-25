@@ -1,0 +1,32 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffeb3b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff9800;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#0a192f"/>
+  
+  <!-- Main ellipse orbit -->
+  <ellipse cx="150" cy="100" rx="80" ry="40" fill="none" stroke="#64ffda" stroke-width="3"/>
+  
+  <!-- Sun at one focus -->
+  <circle cx="120" cy="100" r="10" fill="url(#sunGradient)"/>
+  
+  <!-- Planet on orbit -->
+  <circle cx="210" cy="80" r="5" fill="#4caf50"/>
+  
+  <!-- Focus points -->
+  <circle cx="120" cy="100" r="2" fill="#64ffda"/>
+  <circle cx="180" cy="100" r="2" fill="#64ffda"/>
+  
+  <!-- Center and axes -->
+  <line x1="70" y1="100" x2="230" y2="100" stroke="#8892b0" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/>
+  <line x1="150" y1="60" x2="150" y2="140" stroke="#8892b0" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/>
+  
+  <!-- Labels -->
+  <text x="120" y="125" font-family="Arial, sans-serif" font-size="10" fill="#ffeb3b" text-anchor="middle">Sol</text>
+  <text x="210" y="70" font-family="Arial, sans-serif" font-size="8" fill="#4caf50" text-anchor="middle">Planeta</text>
+</svg>

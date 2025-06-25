@@ -1,0 +1,41 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#64ffda" stroke-width="0.5" opacity="0.3"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#0a192f"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+  
+  <!-- Border -->
+  <rect x="2" y="2" width="396" height="296" fill="none" stroke="#64ffda" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- Book icon -->
+  <rect x="170" y="90" width="60" height="40" fill="none" stroke="#64ffda" stroke-width="3" rx="5"/>
+  <line x1="175" y1="100" x2="225" y2="100" stroke="#64ffda" stroke-width="1"/>
+  <line x1="175" y1="110" x2="225" y2="110" stroke="#64ffda" stroke-width="1"/>
+  <line x1="175" y1="120" x2="210" y2="120" stroke="#64ffda" stroke-width="1"/>
+  
+  <!-- Bookmark -->
+  <rect x="190" y="85" width="8" height="15" fill="#ff6b6b"/>
+  <path d="M 194 100 L 190 95 L 198 95 Z" fill="#ff6b6b"/>
+  
+  <!-- Text -->
+  <text x="200" y="160" font-family="Arial, sans-serif" font-size="16" fill="#64ffda" text-anchor="middle" font-weight="bold">
+    PLACEHOLDER
+  </text>
+  <text x="200" y="180" font-family="Arial, sans-serif" font-size="12" fill="#8892b0" text-anchor="middle">
+    Astronomia Nova
+  </text>
+  <text x="200" y="200" font-family="Arial, sans-serif" font-size="10" fill="#8892b0" text-anchor="middle">
+    400×300 pixels
+  </text>
+  
+  <!-- Corners -->
+  <path d="M 20 20 L 20 35 M 20 20 L 35 20" stroke="#64ffda" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 380 20 L 380 35 M 380 20 L 365 20" stroke="#64ffda" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 20 280 L 20 265 M 20 280 L 35 280" stroke="#64ffda" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 380 280 L 380 265 M 380 280 L 365 280" stroke="#64ffda" stroke-width="2" stroke-linecap="round"/>
+</svg>

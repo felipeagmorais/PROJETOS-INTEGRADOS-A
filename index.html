@@ -531,9 +531,11 @@
         }
 
         .historical-image {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
+            max-width: 200px;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
             border-radius: 8px;
             margin: 10px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -676,7 +678,7 @@
                     <h3 class="law-title">Primeira Lei de Kepler - Lei das Órbitas Elípticas</h3>
                     <p>"Os planetas se movem em órbitas elípticas com o Sol em um dos focos."</p>
                     
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Kepler-first-law.svg/300px-Kepler-first-law.svg.png" 
+                    <img src="assets/leis/first-law-ellipse.svg" 
                          alt="Primeira Lei de Kepler" class="law-image">
                     
                     <p>Conceitos importantes:</p>
@@ -753,9 +755,10 @@
                             <div class="timeline-date">1571</div>
                             <h3>Nascimento de Johannes Kepler</h3>
                             <p>Nascido em Weil der Stadt, Alemanha, em uma família humilde.</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Johannes_Kepler_1610.jpg" 
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Portrait_Confused_With_Johannes_Kepler_1610.jpg/300px-Portrait_Confused_With_Johannes_Kepler_1610.jpg" 
                                  alt="Johannes Kepler" 
                                  class="historical-image"
+                                 width="300" height="413"
                                  onclick="showImageInfo(this, 'Retrato de Johannes Kepler de 1610')">
                         </div>
                     </div>
@@ -765,7 +768,7 @@
                             <div class="timeline-date">1600</div>
                             <h3>Encontro com Tycho Brahe</h3>
                             <p>Kepler torna-se assistente de Tycho Brahe em Praga, ganhando acesso a décadas de observações precisas.</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Tycho_Brahe.JPG" 
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Tycho_Brahe.JPG/300px-Tycho_Brahe.JPG" 
                                  alt="Tycho Brahe" 
                                  class="historical-image"
                                  onclick="showImageInfo(this, 'Retrato de Tycho Brahe')">

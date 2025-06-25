@@ -1,0 +1,35 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#64ffda" stroke-width="0.5" opacity="0.3"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#0a192f"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+  
+  <!-- Border -->
+  <rect x="2" y="2" width="396" height="296" fill="none" stroke="#64ffda" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- Icon - Portrait silhouette -->
+  <ellipse cx="200" cy="100" rx="40" ry="50" fill="none" stroke="#64ffda" stroke-width="3"/>
+  <circle cx="200" cy="80" r="20" fill="none" stroke="#64ffda" stroke-width="3"/>
+  
+  <!-- Text -->
+  <text x="200" y="180" font-family="Arial, sans-serif" font-size="16" fill="#64ffda" text-anchor="middle" font-weight="bold">
+    PLACEHOLDER
+  </text>
+  <text x="200" y="200" font-family="Arial, sans-serif" font-size="12" fill="#8892b0" text-anchor="middle">
+    Isaac Newton
+  </text>
+  <text x="200" y="220" font-family="Arial, sans-serif" font-size="10" fill="#8892b0" text-anchor="middle">
+    400×300 pixels
+  </text>
+  
+  <!-- Corners -->
+  <path d="M 20 20 L 20 35 M 20 20 L 35 20" stroke="#64ffda" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 380 20 L 380 35 M 380 20 L 365 20" stroke="#64ffda" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 20 280 L 20 265 M 20 280 L 35 280" stroke="#64ffda" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 380 280 L 380 265 M 380 280 L 365 280" stroke="#64ffda" stroke-width="2" stroke-linecap="round"/>
+</svg>

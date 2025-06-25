@@ -1,0 +1,26 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <clipPath id="portraitClip">
+      <rect x="50" y="50" width="200" height="250" rx="10" ry="10"/>
+    </clipPath>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#0a192f"/>
+  
+  <!-- Portrait frame -->
+  <rect x="45" y="45" width="210" height="260" fill="none" stroke="#64ffda" stroke-width="3" rx="15" ry="15"/>
+  
+  <!-- Kepler's portrait -->
+  <image x="50" y="50" width="200" height="250" 
+         href="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Portrait_Confused_With_Johannes_Kepler_1610.jpg/960px-Portrait_Confused_With_Johannes_Kepler_1610.jpg"
+         clip-path="url(#portraitClip)" preserveAspectRatio="xMidYMid slice"/>
+  
+  <!-- Decorative elements -->
+  <rect x="45" y="45" width="210" height="260" fill="none" stroke="#ffeb3b" stroke-width="1" rx="15" ry="15" opacity="0.3"/>
+  
+  <!-- Title -->
+  <text x="150" y="330" font-family="Arial, sans-serif" font-size="14" fill="#64ffda" text-anchor="middle" font-weight="bold">Johannes Kepler</text>
+  <text x="150" y="350" font-family="Arial, sans-serif" font-size="10" fill="#8892b0" text-anchor="middle">Retrato de 1610</text>
+  <text x="150" y="370" font-family="Arial, sans-serif" font-size="8" fill="#8892b0" text-anchor="middle">Astrônomo e Matemático</text>
+</svg>

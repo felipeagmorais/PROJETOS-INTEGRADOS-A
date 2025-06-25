@@ -1,0 +1,70 @@
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="starfield" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#162744;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a192f;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background gradient -->
+  <rect width="100%" height="100%" fill="url(#starfield)"/>
+  
+  <!-- Stars -->
+  <circle cx="150" cy="100" r="1" fill="white" opacity="0.8"/>
+  <circle cx="300" cy="180" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="450" cy="120" r="1" fill="white" opacity="0.7"/>
+  <circle cx="600" cy="200" r="1" fill="white" opacity="0.8"/>
+  <circle cx="750" cy="90" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="900" cy="160" r="1" fill="white" opacity="0.6"/>
+  <circle cx="1050" cy="140" r="1" fill="white" opacity="0.8"/>
+  <circle cx="1200" cy="80" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="1350" cy="190" r="1" fill="white" opacity="0.7"/>
+  <circle cx="1500" cy="110" r="1" fill="white" opacity="0.8"/>
+  <circle cx="1650" cy="170" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="1800" cy="130" r="1" fill="white" opacity="0.7"/>
+  
+  <!-- More stars scattered -->
+  <circle cx="200" cy="300" r="1" fill="white" opacity="0.6"/>
+  <circle cx="400" cy="350" r="1" fill="white" opacity="0.8"/>
+  <circle cx="650" cy="400" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="850" cy="320" r="1" fill="white" opacity="0.7"/>
+  <circle cx="1100" cy="380" r="1" fill="white" opacity="0.8"/>
+  <circle cx="1300" cy="350" r="1" fill="white" opacity="0.6"/>
+  <circle cx="1550" cy="300" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="1750" cy="380" r="1" fill="white" opacity="0.7"/>
+  
+  <!-- Bottom stars -->
+  <circle cx="100" cy="500" r="1" fill="white" opacity="0.8"/>
+  <circle cx="350" cy="550" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="550" cy="600" r="1" fill="white" opacity="0.7"/>
+  <circle cx="800" cy="580" r="1" fill="white" opacity="0.8"/>
+  <circle cx="1000" cy="650" r="1" fill="white" opacity="0.6"/>
+  <circle cx="1250" cy="620" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="1450" cy="580" r="1" fill="white" opacity="0.7"/>
+  <circle cx="1700" cy="650" r="1" fill="white" opacity="0.8"/>
+  
+  <!-- Twinkling effect with smaller stars -->
+  <circle cx="180" cy="150" r="0.5" fill="#64ffda" opacity="0.9"/>
+  <circle cx="420" cy="280" r="0.5" fill="#64ffda" opacity="0.8"/>
+  <circle cx="680" cy="220" r="0.5" fill="#64ffda" opacity="0.9"/>
+  <circle cx="920" cy="450" r="0.5" fill="#64ffda" opacity="0.7"/>
+  <circle cx="1180" cy="380" r="0.5" fill="#64ffda" opacity="0.9"/>
+  <circle cx="1420" cy="250" r="0.5" fill="#64ffda" opacity="0.8"/>
+  <circle cx="1680" cy="420" r="0.5" fill="#64ffda" opacity="0.9"/>
+  
+  <!-- Nebula-like clouds (optional) -->
+  <ellipse cx="500" cy="300" rx="150" ry="80" fill="#64ffda" opacity="0.05"/>
+  <ellipse cx="1200" cy="400" rx="200" ry="100" fill="#64ffda" opacity="0.03"/>
+  <ellipse cx="800" cy="200" rx="120" ry="60" fill="#ffffff" opacity="0.02"/>
+  
+  <!-- Placeholder text in center -->
+  <text x="960" y="540" font-family="Arial, sans-serif" font-size="48" fill="#64ffda" text-anchor="middle" font-weight="bold" opacity="0.7">
+    STARFIELD BACKGROUND
+  </text>
+  <text x="960" y="580" font-family="Arial, sans-serif" font-size="24" fill="#8892b0" text-anchor="middle" opacity="0.7">
+    Campo Estelar para Header Parallax
+  </text>
+  <text x="960" y="610" font-family="Arial, sans-serif" font-size="16" fill="#8892b0" text-anchor="middle" opacity="0.7">
+    1920×1080 pixels
+  </text>
+</svg>

@@ -1,0 +1,40 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffeb3b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff9800;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#0a192f"/>
+  
+  <!-- Main ellipse orbit -->
+  <ellipse cx="150" cy="100" rx="80" ry="40" fill="none" stroke="#64ffda" stroke-width="2"/>
+  
+  <!-- Sun at one focus -->
+  <circle cx="120" cy="100" r="8" fill="url(#sunGradient)"/>
+  
+  <!-- Area sectors with equal areas -->
+  <!-- Sector 1: Near perihelion (closer to sun, smaller arc) -->
+  <path d="M 120 100 L 200 80 A 80 40 0 0 1 220 100 Z" fill="#ff6b6b" opacity="0.4"/>
+  
+  <!-- Sector 2: Near aphelion (farther from sun, larger arc) -->
+  <path d="M 120 100 L 80 100 A 80 40 0 0 1 100 120 Z" fill="#4caf50" opacity="0.4"/>
+  
+  <!-- Planet positions -->
+  <circle cx="220" cy="100" r="4" fill="#ff6b6b"/>
+  <circle cx="100" cy="120" r="4" fill="#4caf50"/>
+  
+  <!-- Velocity vectors -->
+  <path d="M 220 100 L 235 95" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <path d="M 100 120 L 110 125" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Labels -->
+  <text x="120" y="120" font-family="Arial, sans-serif" font-size="8" fill="#ffeb3b" text-anchor="middle">Sol</text>
+  <text x="230" y="90" font-family="Arial, sans-serif" font-size="7" fill="#ff6b6b" text-anchor="middle">Periélio</text>
+  <text x="90" y="135" font-family="Arial, sans-serif" font-size="7" fill="#4caf50" text-anchor="middle">Afélio</text>
+  
+  <!-- Equal area indicator -->
+  <text x="150" y="30" font-family="Arial, sans-serif" font-size="10" fill="#64ffda" text-anchor="middle">Áreas Iguais em Tempos Iguais</text>
+</svg>

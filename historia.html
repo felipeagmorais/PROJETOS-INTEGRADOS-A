@@ -117,9 +117,11 @@
         }
 
         .historical-image {
-            width: 300px;
-            height: 200px;
-            object-fit: cover;
+            max-width: 250px;
+            max-height: 350px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -165,10 +167,8 @@
             background: rgba(255, 71, 87, 0.2);
         }
 
-        /* Novos estilos */
-        .parallax-header {
-            height: 100vh;
-            display: flex;
+        /* Novos estilos */        .parallax-header {
+            height: 100vh;            display: flex;
             align-items: center;
             justify-content: center;
             background-attachment: fixed;
@@ -329,9 +329,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             overflow: hidden;
-        }
-
-        .quiz-option::before {
+        }        .quiz-option::before {
             content: '';
             position: absolute;
             left: 0;
@@ -345,18 +343,349 @@
         .quiz-option:hover::before {
             width: 100%;
         }
+        
+        /* Estilos adicionados para a nova página de história */
+        .header-quote {
+            font-style: italic;
+            margin: 20px auto;
+            max-width: 80%;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2em;
+        }
+        
+        .lesson-objectives {
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 80%;
+            text-align: left;
+        }
+        
+        .lesson-objectives h3 {
+            color: #64ffda;
+            margin-bottom: 10px;
+        }
+        
+        .lesson-objectives ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .lesson-objectives li {
+            margin: 5px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            color: #64ffda;
+            margin: 60px 0 30px;
+            font-size: 2em;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: #64ffda;
+        }
+        
+        .context-section {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        
+        .context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .context-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .context-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .context-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .didactic-note {
+            background: rgba(100, 255, 218, 0.05);
+            border-left: 3px solid #64ffda;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .laws-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .laws-detailed-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .law-detailed {
+            margin-bottom: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .law-detailed h3 {
+            color: #64ffda;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        
+        .law-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .law-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .law-image {
+            align-self: center;
+        }
+        
+        .law-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .law-statement {
+            font-weight: bold;
+            font-style: italic;
+            color: #64ffda;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        
+        .experiment-description {
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+        
+        .experiment-materials {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .experiment-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .legacy-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .legacy-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .legacy-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .legacy-item h3 {
+            color: #64ffda;
+            margin-bottom: 15px;
+        }
+        
+        .legacy-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .teacher-resources {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .resource-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .quiz-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #64ffda;
+            width: 20%;
+            transition: width 0.3s ease;
+        }
+        
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .quiz-question h3 {
+            color: #64ffda;
+            margin-bottom: 20px;
+        }
+        
+        .quiz-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .option-letter {
+            font-weight: bold;
+            margin-right: 10px;
+            color: #64ffda;
+        }
+        
+        .quiz-explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            font-style: italic;
+        }
+        
+        .next-question, .quiz-finish, .restart-quiz {
+            padding: 10px 20px;
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .next-question:hover, .quiz-finish:hover, .restart-quiz:hover {
+            background: rgba(100, 255, 218, 0.2);
+        }
+        
+        .quiz-result {
+            text-align: center;
+        }
+        
+        .final-score {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                width: calc(100% - 40px);
+                margin-left: 40px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                margin-left: 40px;
+            }
+            
+            .law-content, .context-grid, .legacy-section, .teacher-resources {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="navigation">
         <a href="index.html" class="nav-button">Simulador</a>
         <a href="experimentos.html" class="nav-button">Experimentos</a>
-    </div>
-
-    <div class="parallax-header">
+    </div>    <div class="parallax-header">
         <div class="header-content">
             <h1>A História das Leis de Kepler</h1>
             <p>Uma jornada através do tempo e das descobertas que revolucionaram nossa compreensão do Sistema Solar</p>
+            <div class="header-quote">
+                <blockquote>"Eu penso os pensamentos de Deus após Ele." — Johannes Kepler</blockquote>
+            </div>
+            <div class="lesson-objectives">
+                <h3>Objetivos da Aula:</h3>
+                <ul>
+                    <li>Compreender o contexto histórico das descobertas de Kepler</li>
+                    <li>Entender as três leis do movimento planetário</li>
+                    <li>Reconhecer o impacto dessas leis na revolução científica</li>
+                    <li>Conectar as descobertas históricas com a astronomia moderna</li>
+                </ul>
+            </div>
         </div>
         <div class="scroll-indicator">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="#64ffda">
@@ -364,14 +693,44 @@
             </svg>
         </div>
     </div>
-
+    
+    <div class="context-section">
+        <h2>Contexto Histórico: O Universo no Século XVI</h2>
+        <div class="context-grid">
+            <div class="context-item">
+                <img src="assets/sistemas/ptolemaic-system.svg" alt="Sistema Ptolomaico" class="context-image">
+                <h3>Sistema Geocêntrico</h3>
+                <p>Por quase 1.500 anos, o modelo geocêntrico de Ptolomeu, que colocava a Terra no centro do universo, foi aceito como verdade absoluta.</p>
+            </div>
+            <div class="context-item">
+                <img src="assets/sistemas/copernican-system.svg" alt="Sistema Heliocêntrico" class="context-image">
+                <h3>Revolução Copernicana</h3>
+                <p>Em 1543, Nicolau Copérnico propôs o modelo heliocêntrico, colocando o Sol no centro, mas ainda usando órbitas circulares perfeitas.</p>
+            </div>
+        </div>
+    </div>    <h2 class="section-title">A Jornada de Kepler: Uma Linha do Tempo Científica</h2>
+    
     <div class="timeline">
         <div class="timeline-item">
             <div class="timeline-content">
                 <h2>1571 - Nascimento de Kepler</h2>
-                <p>Johannes Kepler nasce em Weil der Stadt, Alemanha, em uma família de classe média baixa.</p>
+                <p>Johannes Kepler nasce em 27 de dezembro de 1571 em Weil der Stadt, Alemanha, em uma família de classe média baixa.</p>                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Portrait_Confused_With_Johannes_Kepler_1610.jpg/300px-Portrait_Confused_With_Johannes_Kepler_1610.jpg" 
+                     alt="Johannes Kepler" 
+                     class="historical-image"
+                     width="300" height="413"
+                     onclick="showImageDetail('Retrato de Johannes Kepler', 'Este é um dos retratos mais conhecidos de Johannes Kepler, astrônomo e matemático que revolucionou nossa compreensão do movimento planetário.')">
                 <div class="interactive-element" onclick="showDetail('early-life')">
-                    Clique para saber mais sobre a infância de Kepler
+                    Clique para saber mais sobre a infância e formação de Kepler
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1596 - Mysterium Cosmographicum</h2>
+                <p>Kepler publica sua primeira obra importante, na qual tenta explicar as distâncias dos planetas ao Sol usando os cinco sólidos platônicos.</p>
+                <div class="didactic-note">
+                    <strong>Nota Didática:</strong> Esta primeira teoria de Kepler, embora incorreta, mostrava sua convicção de que deveria haver uma explicação matemática harmônica para a estrutura do sistema solar.
                 </div>
             </div>
         </div>
@@ -379,33 +738,102 @@
         <div class="timeline-item">
             <div class="timeline-content">
                 <h2>1600 - Encontro com Tycho Brahe</h2>
-                <p>Kepler torna-se assistente de Tycho Brahe em Praga, ganhando acesso a décadas de observações precisas.</p>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Tycho_Brahe.JPG" 
+                <p>Kepler torna-se assistente de Tycho Brahe em Praga, ganhando acesso às observações astronômicas mais precisas da época, feitas sem o uso de telescópios.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Tycho_Brahe.JPG/300px-Tycho_Brahe.JPG" 
                      alt="Tycho Brahe" 
                      class="historical-image"
-                     onclick="showImageDetail(this)">
-            </div>
-        </div>
-
-        <div class="timeline-item">
-            <div class="timeline-content">
-                <h2>1609 - Primeira e Segunda Leis</h2>
-                <p>Publicação da "Astronomia Nova", apresentando suas duas primeiras leis do movimento planetário.</p>
-                <div class="interactive-element" onclick="showLawDetails(1)">
-                    Explorar a Primeira Lei
-                </div>
-                <div class="interactive-element" onclick="showLawDetails(2)">
-                    Explorar a Segunda Lei
+                     onclick="showImageDetail('Tycho Brahe', 'Tycho Brahe, astrônomo dinamarquês que fez as observações mais precisas de sua época. Note sua característica prótese nasal de prata-ouro, resultado de um duelo em sua juventude.')">
+                <div class="interactive-element" onclick="showDetail('tycho-data')">
+                    Explorar os dados revolucionários de Tycho Brahe
                 </div>
             </div>
         </div>
 
         <div class="timeline-item">
             <div class="timeline-content">
-                <h2>1619 - Terceira Lei</h2>
-                <p>Publicação de "Harmonices Mundi", contendo a terceira lei do movimento planetário.</p>
+                <h2>1601 - Astrônomo Imperial</h2>
+                <p>Após a morte de Tycho, Kepler é nomeado matemático imperial pelo imperador Rodolfo II, herdando todos os valiosos dados observacionais de Tycho.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1605 - Descoberta da Órbita Elíptica de Marte</h2>
+                <p>Após anos analisando os dados de Tycho sobre o movimento de Marte, Kepler descobre que sua órbita é uma elipse, não um círculo.</p>
+                <div class="data-visualization">
+                    <img src="assets/sistemas/mars-orbit.svg" 
+                         alt="Órbita de Marte" 
+                         class="historical-image"
+                         onclick="showImageDetail('Órbita de Marte', 'Diagrama mostrando a órbita elíptica de Marte com o Sol em um dos focos, conforme descoberto por Kepler.')">
+                </div>
+                <div class="didactic-note">
+                    <strong>Nota Didática:</strong> A descoberta da órbita elíptica de Marte foi revolucionária, rompendo com 2.000 anos de crença em órbitas circulares perfeitas.
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1609 - Astronomia Nova: Primeira e Segunda Leis</h2>
+                <p>Publicação da "Astronomia Nova", apresentando suas duas primeiras leis do movimento planetário após uma década de cálculos intensos.</p>
+                <img src="assets/leis/astronomia-nova-cover.svg" 
+                     alt="Astronomia Nova" 
+                     class="historical-image"
+                     onclick="showImageDetail('Astronomia Nova', 'Página de título da obra revolucionária de Kepler que apresentou suas duas primeiras leis do movimento planetário.')">
+                <div class="laws-container">
+                    <div class="interactive-element" onclick="showLawDetails(1)">
+                        Explorar a Primeira Lei (Órbitas Elípticas)
+                    </div>
+                    <div class="interactive-element" onclick="showLawDetails(2)">
+                        Explorar a Segunda Lei (Lei das Áreas)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1619 - Harmonices Mundi: Terceira Lei</h2>
+                <p>Publicação de "Harmonices Mundi" (Harmonia dos Mundos), contendo a terceira lei do movimento planetário, relacionando período orbital e distância.</p>
                 <div class="interactive-element" onclick="showLawDetails(3)">
-                    Explorar a Terceira Lei
+                    Explorar a Terceira Lei (Lei Harmônica)
+                </div>
+                <div class="didactic-note">
+                    <strong>Curiosidade:</strong> Kepler acreditava que os planetas emitiam uma "música celestial" enquanto se moviam em suas órbitas.
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1627 - Tabulae Rudolphinae</h2>
+                <p>Kepler publica as "Tabelas Rudolfinas", tabelas astronômicas de precisão sem precedentes baseadas em suas leis e nos dados de Tycho Brahe.</p>
+                <div class="didactic-note">
+                    <strong>Importância Prática:</strong> Estas tabelas foram usadas por navegadores e astrônomos por mais de um século, comprovando na prática a precisão das teorias de Kepler.
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1630 - Falecimento de Kepler</h2>
+                <p>Johannes Kepler falece em 15 de novembro de 1630, em Regensburg, Alemanha, deixando um legado científico que mudaria para sempre nossa compreensão do cosmos.</p>
+                <div class="interactive-element" onclick="showDetail('kepler-legacy')">
+                    Explorar o Legado de Kepler para a Ciência
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h2>1687 - Newton e a Gravitação Universal</h2>
+                <p>Isaac Newton publica "Principia Mathematica", unificando as leis de Kepler em sua teoria da gravidade e explicando-as matematicamente.</p>
+                <img src="assets/historicos/isaac-newton.svg" 
+                     alt="Isaac Newton" 
+                     class="historical-image"
+                     onclick="showImageDetail('Isaac Newton', 'Sir Isaac Newton, que usou as leis de Kepler como evidência para sua teoria da gravitação universal, formulando as leis matemáticas que explicam o movimento dos corpos celestes.')">
+                <div class="didactic-note">
+                    <strong>Conexão Científica:</strong> Newton reconheceu que sua lei da gravitação universal explicava matematicamente as leis empíricas de Kepler.
                 </div>
             </div>
         </div>
@@ -419,51 +847,568 @@
 
     <div class="interactive-map">
         <!-- Pontos do mapa serão adicionados via JavaScript -->
+    </div>    <h2 class="section-title">As Três Leis de Kepler: Explicação Detalhada</h2>
+    
+    <div class="laws-detailed-section">
+        <div class="law-detailed" id="first-law">
+            <h3>Primeira Lei de Kepler: Lei das Órbitas Elípticas</h3>
+            <div class="law-content">
+                <div class="law-image">
+                    <img src="assets/leis/first-law-ellipse.svg" alt="Primeira Lei de Kepler">
+                </div>
+                <div class="law-text">
+                    <p class="law-statement">"Todos os planetas se movem em órbitas elípticas, com o Sol ocupando um dos focos da elipse."</p>
+                    <p>Esta lei revolucionou a astronomia ao abandonar o conceito de órbitas circulares perfeitas, uma crença que persistia desde a antiguidade. Kepler precisou de anos de cálculos matemáticos para chegar a esta conclusão, analisando meticulosamente os precisos dados de Tycho Brahe sobre o movimento de Marte.</p>
+                    <p><strong>Implicações:</strong> Ao demonstrar que as órbitas são elípticas e não circulares, Kepler eliminou a necessidade dos epiciclos complexos do modelo ptolomaico, simplificando drasticamente nossa compreensão do sistema solar.</p>
+                    <div class="interactive-element" onclick="demonstrateEllipse()">
+                        Demonstração Interativa: Como Construir uma Elipse
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="law-detailed" id="second-law">
+            <h3>Segunda Lei de Kepler: Lei das Áreas Iguais</h3>
+            <div class="law-content">
+                <div class="law-image">
+                    <img src="assets/leis/second-law-areas.svg" alt="Segunda Lei de Kepler">
+                </div>
+                <div class="law-text">
+                    <p class="law-statement">"Uma linha traçada do Sol a um planeta varre áreas iguais em tempos iguais."</p>
+                    <p>Esta lei explica por que os planetas se movem mais rápido quando estão mais próximos do Sol (periélio) e mais devagar quando estão mais distantes (afélio). É uma expressão da conservação do momento angular, princípio que seria mais tarde explicado por Newton.</p>
+                    <p><strong>Aplicação:</strong> Essa lei permite-nos calcular com precisão a posição de um planeta em qualquer ponto de sua órbita se conhecermos sua posição inicial, velocidade e a forma de sua órbita.</p>
+                    <div class="interactive-element" onclick="demonstrateSecondLaw()">
+                        Demonstração Interativa: Velocidade Orbital Variável
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="law-detailed" id="third-law">
+            <h3>Terceira Lei de Kepler: Lei Harmônica</h3>
+            <div class="law-content">
+                <div class="law-image">
+                    <img src="assets/leis/third-law-graph.svg" alt="Terceira Lei de Kepler">
+                </div>
+                <div class="law-text">
+                    <p class="law-statement">"O quadrado do período orbital de um planeta é diretamente proporcional ao cubo do semi-eixo maior de sua órbita."</p>
+                    <p>Matematicamente expressa como: P² ∝ a³, onde P é o período orbital e a é o semi-eixo maior da órbita elíptica.</p>
+                    <p>Kepler descobriu esta lei enquanto buscava harmonia matemática no sistema solar, uma "música das esferas". Esta lei permite comparar as órbitas de diferentes planetas e calcular distâncias relativas no sistema solar.</p>
+                    <p><strong>Impacto:</strong> Esta lei foi crucial para estabelecer as verdadeiras dimensões do sistema solar e é utilizada até hoje na astronomia para calcular as órbitas de planetas em outros sistemas solares.</p>
+                    <div class="interactive-element" onclick="demonstrateThirdLaw()">
+                        Demonstração Interativa: Calculadora da Lei Harmônica
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <h2 class="section-title">Atividades Práticas: Experimente Você Mesmo</h2>
+    
     <div class="experiment-section">
         <div class="experiment-card" onclick="startExperiment('ellipse')">
-            <h3>Experimento Virtual: Órbitas Elípticas</h3>
-            <p>Desenhe uma elipse e descubra como Kepler chegou à sua primeira lei.</p>
+            <h3>Experimento 1: Construindo uma Elipse</h3>
+            <p class="experiment-description">Usando apenas um barbante, dois pregos (que representam os focos) e um lápis, você pode desenhar uma elipse perfeita, demonstrando a primeira lei de Kepler.</p>
+            <div class="experiment-materials">
+                <strong>Materiais:</strong> Barbante, dois pregos, papelão, lápis.
+            </div>
+            <img src="assets/leis/ellipse-construction.gif" alt="Construção de Elipse" class="experiment-image">
         </div>
+        
         <div class="experiment-card" onclick="startExperiment('area')">
-            <h3>Experimento Virtual: Lei das Áreas</h3>
-            <p>Visualize como a velocidade orbital varia ao longo da trajetória.</p>
+            <h3>Experimento 2: Visualizando a Lei das Áreas</h3>
+            <p class="experiment-description">Usando um simulador online, observe como um planeta varre áreas iguais em tempos iguais, mesmo quando sua velocidade varia.</p>
+            <div class="experiment-materials">
+                <strong>Recursos:</strong> Acesso ao simulador no navegador.
+            </div>
+            <img src="assets/leis/equal-areas-animation.gif" alt="Lei das Áreas" class="experiment-image">
         </div>
+        
         <div class="experiment-card" onclick="startExperiment('harmony')">
-            <h3>Experimento Virtual: Harmonia dos Mundos</h3>
-            <p>Explore a relação matemática entre período orbital e distância.</p>
+            <h3>Experimento 3: Lei Harmônica em Ação</h3>
+            <p class="experiment-description">Compare os períodos orbitais dos planetas de nosso sistema solar e verifique se eles seguem a terceira lei de Kepler usando uma calculadora interativa.</p>
+            <div class="experiment-materials">
+                <strong>Recursos:</strong> Tabela de dados planetários, calculadora.
+            </div>
+
+        </div>
+        
+        <div class="experiment-card" onclick="startExperiment('modern')">
+            <h3>Experimento 4: Kepler na Astronomia Moderna</h3>
+            <p class="experiment-description">Saiba como as leis de Kepler são usadas hoje para detectar exoplanetas e determinar suas órbitas ao redor de outras estrelas.</p>
+            <div class="experiment-materials">
+                <strong>Recursos:</strong> Dados da NASA, simulador de exoplanetas.
+            </div>
+
+        </div>
+    </div>    <h2 class="section-title">Legado de Kepler: Impacto na Ciência Moderna</h2>
+    
+    <div class="legacy-section">
+        <div class="legacy-item">
+            <h3>Base da Física Moderna</h3>
+            <p>As leis de Kepler forneceram evidências cruciais para a teoria da gravitação universal de Isaac Newton. Newton mostrou que as três leis de Kepler podiam ser derivadas de princípios físicos fundamentais, unificando a física terrestre e celeste pela primeira vez na história.</p>
+            <img src="assets/modernas/universal-gravitation.svg" alt="Gravitação Universal" class="legacy-image">
+        </div>
+        
+        <div class="legacy-item">
+            <h3>Exploração Espacial</h3>
+            <p>As leis de Kepler são fundamentais para o planejamento de missões espaciais modernas. Engenheiros da NASA e de outras agências espaciais usam estas leis para calcular trajetórias precisas para sondas interplanetárias, economizando combustível e otimizando missões.</p>
+            <img src="assets/modernas/space-trajectories.svg" alt="Trajetórias Espaciais" class="legacy-image">
+        </div>
+        
+        <div class="legacy-item">
+            <h3>Descoberta de Exoplanetas</h3>
+            <p>O método da velocidade radial para detecção de exoplanetas baseia-se na terceira lei de Kepler. Quando uma estrela oscila devido à presença de um planeta, cientistas podem calcular a massa e a órbita do planeta usando os princípios estabelecidos por Kepler.</p>
+            <img src="assets/modernas/exoplanet-detection.svg" alt="Detecção de Exoplanetas" class="legacy-image">
+        </div>
+        
+        <div class="legacy-item">
+            <h3>Revolução Científica</h3>
+            <p>O trabalho de Kepler foi um marco na revolução científica, demonstrando como observações cuidadosas e análise matemática podem revelar as leis da natureza, estabelecendo o método científico moderno que utilizamos até hoje.</p>
+
         </div>
     </div>
-
+    
+    <h2 class="section-title">Recursos para Professores</h2>
+    
+    <div class="teacher-resources">
+        <div class="resource-item">
+            <h3>Plano de Aula: As Leis de Kepler</h3>
+            <p>Plano completo para uma aula de 50 minutos sobre as leis de Kepler, incluindo atividades práticas, discussões guiadas e avaliação.</p>
+            <div class="interactive-element" onclick="showResource('lesson-plan')">
+                Baixar Plano de Aula
+            </div>
+        </div>
+        
+        <div class="resource-item">
+            <h3>Demonstrações em Sala de Aula</h3>
+            <p>Instruções passo a passo para demonstrações práticas das leis de Kepler usando materiais simples disponíveis em qualquer sala de aula.</p>
+            <div class="interactive-element" onclick="showResource('demonstrations')">
+                Ver Demonstrações
+            </div>
+        </div>
+        
+        <div class="resource-item">
+            <h3>Avaliação Formativa e Sumativa</h3>
+            <p>Conjunto de questões para avaliar a compreensão dos alunos sobre as leis de Kepler, desde o nível básico até o avançado.</p>
+            <div class="interactive-element" onclick="showResource('assessment')">
+                Acessar Avaliações
+            </div>
+        </div>
+        
+        <div class="resource-item">
+            <h3>Conexões Interdisciplinares</h3>
+            <p>Guia para conectar o estudo das leis de Kepler com matemática, história, filosofia e tecnologia moderna.</p>
+            <div class="interactive-element" onclick="showResource('interdisciplinary')">
+                Explorar Conexões
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Teste seus Conhecimentos</h2>
+    
     <div class="quiz-section">
-        <h2>Teste seus Conhecimentos</h2>
-        <div class="quiz-question">
-            <p>Qual foi a principal contribuição de Tycho Brahe para as descobertas de Kepler?</p>
-            <div class="quiz-option" onclick="checkAnswer(this, true)">
-                Suas observações precisas dos movimentos planetários
+        <div class="quiz-progress">
+            <span id="question-number">Pergunta 1/5</span>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%"></div>
             </div>
-            <div class="quiz-option" onclick="checkAnswer(this, false)">
-                Sua teoria heliocêntrica do Sistema Solar
+            <span id="score">Pontuação: 0</span>
+        </div>
+        
+        <div class="quiz-container" id="quiz-container">
+            <!-- Pergunta 1 -->
+            <div class="quiz-question" id="question-1">
+                <h3>Qual foi a principal contribuição de Tycho Brahe para as descobertas de Kepler?</h3>
+                <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, true)">
+                    <span class="option-letter">A.</span> Suas observações precisas dos movimentos planetários
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">B.</span> Sua teoria heliocêntrica do Sistema Solar
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">C.</span> Seus cálculos matemáticos sobre órbitas elípticas
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">D.</span> Seu modelo de Sistema Solar com a Terra no centro
+                </div>
+                <div class="quiz-explanation" id="explanation-1" style="display: none;">
+                    <p>Tycho Brahe fez observações extremamente precisas do movimento dos corpos celestes, especialmente de Marte, por mais de 20 anos e sem o uso de telescópio. Estes dados precisos foram essenciais para que Kepler pudesse desenvolver suas leis.</p>
+                </div>
+                <button class="next-question" onclick="nextQuestion(1)" style="display: none;">Próxima Pergunta</button>
             </div>
-            <div class="quiz-option" onclick="checkAnswer(this, false)">
-                Seus cálculos matemáticos sobre órbitas elípticas
+            
+            <!-- Pergunta 2 -->
+            <div class="quiz-question" id="question-2" style="display: none;">
+                <h3>A primeira lei de Kepler estabelece que:</h3>
+                <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, true)">
+                    <span class="option-letter">A.</span> As órbitas dos planetas são elípticas, com o Sol em um dos focos
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">B.</span> As órbitas dos planetas são circulares perfeitas
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">C.</span> O quadrado do período orbital é proporcional ao cubo da distância média
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">D.</span> Uma linha ligando o Sol a um planeta varre áreas iguais em tempos iguais
+                </div>
+                <div class="quiz-explanation" id="explanation-2" style="display: none;">
+                    <p>A primeira lei de Kepler contradiz a antiga crença de que os corpos celestes se movem em círculos perfeitos, uma ideia que persistia desde Aristóteles. Esta foi uma ruptura revolucionária com a tradição científica.</p>
+                </div>
+                <button class="next-question" onclick="nextQuestion(2)" style="display: none;">Próxima Pergunta</button>
+            </div>
+            
+            <!-- Pergunta 3 -->
+            <div class="quiz-question" id="question-3" style="display: none;">
+                <h3>A segunda lei de Kepler explica por que:</h3>
+                <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, true)">
+                    <span class="option-letter">A.</span> Os planetas se movem mais rápido quando estão mais próximos do Sol
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">B.</span> As órbitas são elípticas e não circulares
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">C.</span> Os planetas mais distantes do Sol têm períodos orbitais mais longos
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">D.</span> A Terra tem estações do ano
+                </div>
+                <div class="quiz-explanation" id="explanation-3" style="display: none;">
+                    <p>A segunda lei de Kepler, conhecida como lei das áreas iguais, explica a variação de velocidade dos planetas em diferentes pontos de sua órbita. No periélio (ponto mais próximo do Sol), o planeta se move mais rápido, e no afélio (ponto mais distante), mais devagar.</p>
+                </div>
+                <button class="next-question" onclick="nextQuestion(3)" style="display: none;">Próxima Pergunta</button>
+            </div>
+            
+            <!-- Pergunta 4 -->
+            <div class="quiz-question" id="question-4" style="display: none;">
+                <h3>A terceira lei de Kepler permite:</h3>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">A.</span> Calcular a massa de um planeta
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">B.</span> Determinar a composição química de um planeta
+                </div>
+                <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, true)">
+                    <span class="option-letter">C.</span> Comparar os períodos orbitais e distâncias de diferentes planetas
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">D.</span> Calcular a idade do Sistema Solar
+                </div>
+                <div class="quiz-explanation" id="explanation-4" style="display: none;">
+                    <p>A terceira lei estabelece que o quadrado do período orbital de um planeta é proporcional ao cubo do semi-eixo maior da órbita. Isso permite comparar diferentes planetas e estabelecer relações matemáticas entre suas órbitas.</p>
+                </div>
+                <button class="next-question" onclick="nextQuestion(4)" style="display: none;">Próxima Pergunta</button>
+            </div>
+            
+            <!-- Pergunta 5 -->
+            <div class="quiz-question" id="question-5" style="display: none;">
+                <h3>Qual cientista usou as leis de Kepler como base para desenvolver a teoria da gravitação universal?</h3>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">A.</span> Galileu Galilei
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">B.</span> Albert Einstein
+                </div>
+                <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, true)">
+                    <span class="option-letter">C.</span> Isaac Newton
+                </div>
+                <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, false)">
+                    <span class="option-letter">D.</span> Nicolau Copérnico
+                </div>
+                <div class="quiz-explanation" id="explanation-5" style="display: none;">
+                    <p>Isaac Newton demonstrou que as três leis de Kepler podiam ser derivadas matematicamente de sua lei da gravitação universal, unificando a física terrestre e celeste pela primeira vez na história.</p>
+                </div>
+                <button class="quiz-finish" onclick="finishQuiz()" style="display: none;">Ver Resultado</button>
+            </div>
+            
+            <!-- Resultado do Quiz -->
+            <div class="quiz-result" id="quiz-result" style="display: none;">
+                <h3>Resultado Final</h3>
+                <div id="result-message"></div>
+                <p class="final-score">Sua pontuação: <span id="final-score">0</span>/5</p>
+                <button class="restart-quiz" onclick="restartQuiz()">Recomeçar Quiz</button>
             </div>
         </div>
-    </div>
+    </div>    <script>
+        // Estado do Quiz
+        let currentQuestion = 1;
+        let score = 0;
+        const totalQuestions = 5;
+        
+        // Detalhes e informações expandidas
+        const detailContent = {
+            'early-life': `
+                <h3>Primeiros Anos e Formação de Kepler</h3>
 
-    <script>
-        function showDetail(topic) {
-            const details = {
-                'early-life': `
-                    <h3>Primeiros Anos de Kepler</h3>
-                    <p>Apesar das dificuldades financeiras, Kepler demonstrou desde cedo um talento excepcional 
-                    para matemática e astronomia. Sua educação foi possível graças a uma bolsa de estudos 
-                    da Igreja Luterana para estudar no seminário de Maulbronn.</p>
+                <p>Johannes Kepler nasceu em 27 de dezembro de 1571 em Weil der Stadt, uma pequena cidade no sudoeste da Alemanha. 
+                Sua família era de origem humilde - seu pai era mercenário e frequentemente ausente, e sua mãe, filha de um estalajadeiro, 
+                trabalhava como curandeira e mais tarde seria acusada de bruxaria.</p>
+                <p>Apesar das dificuldades financeiras e de saúde (Kepler sofria de problemas de visão e outras enfermidades), 
+                ele demonstrou desde cedo um talento excepcional para matemática. Sua educação formal começou na escola latina em Leonberg,
+                continuou no seminário de Maulbronn e culminou na Universidade de Tübingen, onde estudou teologia, matemática e astronomia.</p>
+                <p>Na Universidade de Tübingen, Kepler foi aluno de Michael Maestlin, um dos poucos defensores do modelo heliocêntrico de Copérnico na época.
+                Esta influência seria fundamental para o desenvolvimento posterior de suas teorias astronômicas.</p>
+                <p>Curiosamente, o talento matemático de Kepler o salvou de seguir carreira eclesiástica - ele foi indicado para o cargo de professor
+                de matemática em Graz em 1594, o que o levou pelo caminho da astronomia e das descobertas que revolucionariam nossa compreensão do universo.</p>
+            `,
+            'tycho-data': `
+                <h3>Os Dados Revolucionários de Tycho Brahe</h3>
+
+                <p>Tycho Brahe (1546-1601) foi um astrônomo dinamarquês que revolucionou a observação astronômica pré-telescópio. Com financiamento generoso do rei da Dinamarca,
+                Tycho construiu Uraniborg, o mais sofisticado observatório da Europa, na ilha de Hven.</p>
+                <p>O que tornou os dados de Tycho extraordinários:</p>
+                <ul>
+                    <li><strong>Precisão sem precedentes:</strong> Suas medições tinham precisão de 1 arcominuto, muito superior aos instrumentos anteriores.</li>
+                    <li><strong>Observações sistemáticas:</strong> Durante mais de 20 anos, registrou meticulosamente as posições planetárias, especialmente Marte.</li>
+                    <li><strong>Métodos rigorosos:</strong> Introduziu técnicas para reduzir erros observacionais e calibrar instrumentos.</li>
+                </ul>
+                <p>Quando Kepler herdou estes dados após a morte de Tycho em 1601, obteve um tesouro científico. Foram estes dados de incomparável precisão
+                que permitiram a Kepler identificar a verdadeira forma das órbitas planetárias como elipses, não círculos, após anos de cálculos exaustivos.</p>
+                <p>É importante notar que Tycho não apoiava completamente o modelo heliocêntrico - ele propôs um sistema híbrido onde os planetas orbitavam o Sol,
+                mas o Sol, por sua vez, orbitava uma Terra estacionária. Ironicamente, foram seus dados precisos que, nas mãos de Kepler, ajudaram a estabelecer
+                definitivamente o modelo heliocêntrico.</p>
+            `,
+            'kepler-legacy': `
+                <h3>O Amplo Legado de Johannes Kepler</h3>
+                <p>O impacto de Kepler na ciência vai muito além de suas três famosas leis. Seu legado abrange diversas áreas:</p>
+                <div class="legacy-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                    <div class="legacy-item">
+                        <h4>Óptica</h4>
+                        <p>Kepler desenvolveu uma teoria da visão, explicou como funcionam as lentes telescópicas e aprimorou o telescópio após sua invenção por Galileu.</p>
+                    </div>
+                    <div class="legacy-item">
+                        <h4>Matemática</h4>
+                        <p>Desenvolveu novos métodos matemáticos para calcular volumes, contribuindo para os fundamentos do cálculo infinitesimal.</p>
+                    </div>
+                    <div class="legacy-item">
+                        <h4>Método Científico</h4>
+                        <p>Seu rigoroso processo de testar hipóteses contra observações empíricas ajudou a estabelecer o método científico moderno.</p>
+                    </div>
+                    <div class="legacy-item">
+                        <h4>Integração Ciência-Religião</h4>
+                        <p>Kepler demonstrou que ciência e fé poderiam coexistir, vendo seu trabalho científico como uma forma de compreender a mente do Criador.</p>
+                    </div>
+                </div>
+                <p style="margin-top: 15px;">Kepler também foi pioneiro na ficção científica (escrevendo "Somnium", uma história sobre uma viagem à Lua),
+                estudou cristais de neve (sendo o primeiro a notar sua simetria hexagonal) e explorou as propriedades matemáticas das embalagens de esferas
+                (problema de Kepler).</p>
+                <p>Sua abordagem interdisciplinar, combinando matemática, física, astronomia e filosofia, exemplifica o ideal renascentista e continua inspirando
+                cientistas na busca por conexões entre diferentes campos do conhecimento.</p>
+            `
+        };
+        
+        // Recursos para professores
+        const teacherResources = {
+            'lesson-plan': {
+                title: 'Plano de Aula: As Leis de Kepler',
+                content: `
+                    <h3>Plano de Aula - As Leis de Kepler</h3>
+                    <p><strong>Duração:</strong> 50 minutos</p>
+                    <p><strong>Objetivos de Aprendizagem:</strong></p>
+                    <ul>
+                        <li>Compreender as três leis de Kepler e seu significado</li>
+                        <li>Contextualizar as descobertas de Kepler na revolução científica</li>
+                        <li>Aplicar as leis de Kepler em problemas simples</li>
+                    </ul>
+                    <p><strong>Materiais:</strong></p>
+                    <ul>
+                        <li>Barbante, alfinetes e cartolina para demonstração de elipse</li>
+                        <li>Simulador digital (ou apresentação animada) das leis de Kepler</li>
+                        <li>Folha de exercícios para fixação</li>
+                    </ul>
+                    <p><strong>Desenvolvimento:</strong></p>
+                    <ol>
+                        <li><strong>Introdução (5 min)</strong>: Contextualização histórica da astronomia antes de Kepler</li>
+                        <li><strong>Desenvolvimento (30 min)</strong>:
+                            <ul>
+                                <li>Demonstração prática da primeira lei (10 min)</li>
+                                <li>Explicação e visualização da segunda lei (10 min)</li>
+                                <li>Aplicação numérica da terceira lei (10 min)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Conclusão (10 min)</strong>: Discussão sobre o impacto das leis de Kepler</li>
+                        <li><strong>Avaliação (5 min)</strong>: Quiz rápido para verificar compreensão</li>
+                    </ol>
+                    <p><a href="#" class="download-link">Baixar versão completa em PDF</a></p>
                 `
-            };
+            },
+            'demonstrations': {
+                title: 'Demonstrações Práticas das Leis de Kepler',
+                content: `
+                    <h3>Demonstrações Práticas das Leis de Kepler</h3>
+                    
+                    <div class="demo-item">
+                        <h4>Demonstração 1: Construindo uma Elipse (Primeira Lei)</h4>
+                        <p><strong>Materiais:</strong> Cartolina, dois alfinetes, barbante, lápis</p>
+                        <p><strong>Procedimento:</strong></p>
+                        <ol>
+                            <li>Fixe os dois alfinetes na cartolina (eles representarão os focos da elipse)</li>
+                            <li>Amarre as pontas do barbante em cada alfinete, deixando uma folga</li>
+                            <li>Com o lápis, mantenha o barbante esticado e desenhe uma curva completa</li>
+                            <li>O resultado será uma elipse perfeita, com os alfinetes nos dois focos</li>
+                        </ol>
+                        <p><strong>Discussão:</strong> Explique que o Sol ocupa apenas um dos focos da elipse, não o centro. 
+                        Demonstre como a excentricidade da órbita muda conforme a distância entre os focos.</p>
+                    </div>
+                    
+                    <div class="demo-item">
+                        <h4>Demonstração 2: Lei das Áreas (Segunda Lei)</h4>
+                        <p><strong>Materiais:</strong> Elipse desenhada na demonstração anterior, papel quadriculado transparente, cronômetro</p>
+                        <p><strong>Procedimento:</strong></p>
+                        <ol>
+                            <li>Coloque o papel quadriculado sobre a elipse</li>
+                            <li>Marque intervalos iguais de tempo ao longo da órbita</li>
+                            <li>Conte os quadrados em cada setor para verificar que as áreas são iguais</li>
+                        </ol>
+                        <p><strong>Discussão:</strong> Mostre como o planeta se move mais rapidamente quando está mais próximo do Sol.</p>
+                    </div>
+                    
+                    <div class="demo-item">
+                        <h4>Demonstração 3: Lei Harmônica (Terceira Lei)</h4>
+                        <p><strong>Materiais:</strong> Tabela com dados dos planetas, calculadora</p>
+                        <p><strong>Procedimento:</strong></p>
+                        <ol>
+                            <li>Para cada planeta, calcule P² (período orbital ao quadrado)</li>
+                            <li>Calcule a³ (semi-eixo maior ao cubo)</li>
+                            <li>Compare P²/a³ para diferentes planetas - os valores devem ser aproximadamente constantes</li>
+                        </ol>
+                    </div>
+                    <p><a href="#" class="download-link">Baixar instruções detalhadas em PDF</a></p>
+                `
+            },
+            'assessment': {
+                title: 'Avaliação sobre as Leis de Kepler',
+                content: `
+                    <h3>Avaliação sobre as Leis de Kepler</h3>
+                    
+                    <h4>Questões de Nível Básico</h4>
+                    <ol>
+                        <li>Explique, com suas próprias palavras, o que afirma a primeira lei de Kepler.</li>
+                        <li>Por que um planeta se move mais rápido quando está mais próximo do Sol?</li>
+                        <li>Quem foi Tycho Brahe e qual foi sua contribuição para as descobertas de Kepler?</li>
+                    </ol>
+                    
+                    <h4>Questões de Nível Intermediário</h4>
+                    <ol>
+                        <li>Se a Terra tem período orbital de 1 ano e está a 1 UA do Sol, calcule o período orbital de um planeta a 4 UA do Sol.</li>
+                        <li>Explique como a segunda lei de Kepler se relaciona com o princípio da conservação do momento angular.</li>
+                        <li>Compare os modelos de Ptolomeu, Copérnico e Kepler, destacando as principais diferenças.</li>
+                    </ol>
+                    
+                    <h4>Questões de Nível Avançado</h4>
+                    <ol>
+                        <li>Demonstre matematicamente como a terceira lei de Kepler pode ser derivada da lei da gravitação universal de Newton.</li>
+                        <li>Explique como as leis de Kepler são utilizadas na detecção de exoplanetas pelo método da velocidade radial.</li>
+                        <li>Discuta como a excentricidade da órbita afeta a habitabilidade de um planeta.</li>
+                    </ol>
+                    
+                    <h4>Projeto Prático</h4>
+                    <p>Crie um modelo em escala do sistema solar que demonstre visualmente as três leis de Kepler. Inclua uma explicação escrita de como seu modelo ilustra cada uma das leis.</p>
+                    
+                    <p><a href="#" class="download-link">Baixar versão completa com gabarito</a></p>
+                `
+            },
+            'interdisciplinary': {
+                title: 'Conexões Interdisciplinares',
+                content: `
+                    <h3>Conexões Interdisciplinares: As Leis de Kepler Além da Física</h3>
+                    
+                    <div class="connection">
+                        <h4>Matemática</h4>
+                        <ul>
+                            <li><strong>Geometria:</strong> Estudo das propriedades das cônicas (elipses, parábolas, hipérboles)</li>
+                            <li><strong>Álgebra:</strong> Equações que descrevem as órbitas e relações entre variáveis</li>
+                            <li><strong>Trigonometria:</strong> Cálculos de posições planetárias e projeções</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="connection">
+                        <h4>História</h4>
+                        <ul>
+                            <li><strong>Revolução Científica:</strong> O papel de Kepler na mudança de paradigma do geocentrismo para o heliocentrismo</li>
+                            <li><strong>Guerra dos Trinta Anos:</strong> Contexto histórico-político das descobertas de Kepler</li>
+                            <li><strong>História da Tecnologia:</strong> Desenvolvimento dos instrumentos astronômicos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="connection">
+                        <h4>Filosofia</h4>
+                        <ul>
+                            <li><strong>Epistemologia:</strong> Como o método científico de Kepler contribuiu para novas formas de conhecimento</li>
+                            <li><strong>Filosofia da Ciência:</strong> A harmonia matemática como princípio organizador do universo</li>
+                            <li><strong>Relações Ciência-Religião:</strong> Como Kepler conciliou sua fé com suas descobertas científicas</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="connection">
+                        <h4>Arte e Literatura</h4>
+                        <ul>
+                            <li><strong>Representações Artísticas:</strong> Como os modelos cosmológicos influenciaram a arte renascentista</li>
+                            <li><strong>Literatura Científica:</strong> Análise da "Astronomia Nova" como obra literária e científica</li>
+                            <li><strong>Ficção Científica:</strong> O "Somnium" de Kepler como precursor do gênero</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="connection">
+                        <h4>Tecnologia Moderna</h4>
+                        <ul>
+                            <li><strong>Engenharia Espacial:</strong> Aplicação das leis de Kepler no planejamento de missões espaciais</li>
+                            <li><strong>Astrofísica Computacional:</strong> Simulações modernas baseadas nos princípios keplerianos</li>
+                            <li><strong>Tecnologia de GPS:</strong> Correções relativistas nas órbitas de satélites baseadas em princípios keplerianos</li>
+                        </ul>
+                    </div>
+                    
+                    <p><a href="#" class="download-link">Baixar guia completo de atividades interdisciplinares</a></p>
+                `
+            }
+        };
+        
+        // Função para exibir detalhes expandidos
+        function showDetail(topic) {
+            if (!detailContent[topic]) {
+                console.error("Conteúdo não encontrado para o tópico:", topic);
+                return;
+            }
 
             const modal = document.createElement('div');
+            modal.className = 'detail-modal';
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.background = 'rgba(10, 25, 47, 0.95)';
+            modal.style.padding = '30px';
+            modal.style.borderRadius = '10px';
+            modal.style.maxWidth = '800px';
+            modal.style.maxHeight = '80vh';
+            modal.style.overflow = 'auto';
+            modal.style.zIndex = '1000';
+            modal.style.boxShadow = '0 0 30px rgba(100, 255, 218, 0.2)';
+            
+            const content = document.createElement('div');
+            content.innerHTML = detailContent[topic];
+            
+            const closeButton = document.createElement('button');
+            closeButton.textContent = 'Fechar';
+            closeButton.style.marginTop = '20px';
+            closeButton.style.padding = '10px 20px';
+            closeButton.style.background = 'rgba(100, 255, 218, 0.1)';
+            closeButton.style.color = '#64ffda';
+            closeButton.style.border = '1px solid #64ffda';
+            closeButton.style.borderRadius = '5px';
+            closeButton.style.cursor = 'pointer';
+            closeButton.onclick = () => modal.remove();
+            
+            modal.appendChild(content);
+            modal.appendChild(closeButton);
+            document.body.appendChild(modal);
+        }
+        
+        // Função para mostrar detalhes das imagens
+        function showImageDetail(title, description) {
+            const modal = document.createElement('div');
+            modal.className = 'image-detail-modal';
             modal.style.position = 'fixed';
             modal.style.top = '50%';
             modal.style.left = '50%';
@@ -473,26 +1418,325 @@
             modal.style.borderRadius = '10px';
             modal.style.maxWidth = '600px';
             modal.style.zIndex = '1000';
-            modal.innerHTML = details[topic] + '<button onclick="this.parentElement.remove()" style="margin-top: 20px;">Fechar</button>';
+            modal.style.boxShadow = '0 0 30px rgba(100, 255, 218, 0.2)';
+            
+            const content = document.createElement('div');
+            content.innerHTML = `
+                <h3>${title}</h3>
+                <p>${description}</p>
+            `;
+            
+            const closeButton = document.createElement('button');
+            closeButton.textContent = 'Fechar';
+            closeButton.style.marginTop = '20px';
+            closeButton.style.padding = '10px 20px';
+            closeButton.style.background = 'rgba(100, 255, 218, 0.1)';
+            closeButton.style.color = '#64ffda';
+            closeButton.style.border = '1px solid #64ffda';
+            closeButton.style.borderRadius = '5px';
+            closeButton.style.cursor = 'pointer';
+            closeButton.onclick = () => modal.remove();
+            
+            modal.appendChild(content);
+            modal.appendChild(closeButton);
             document.body.appendChild(modal);
         }
-
+        
+        // Função para mostrar detalhes das leis de Kepler
         function showLawDetails(lawNumber) {
             const laws = {
-                1: "As órbitas dos planetas são elípticas, com o Sol em um dos focos.",
-                2: "Uma linha ligando um planeta ao Sol varre áreas iguais em tempos iguais.",
-                3: "O quadrado do período orbital é proporcional ao cubo do semi-eixo maior da órbita."
+                1: {
+                    title: "Primeira Lei de Kepler: Lei das Órbitas Elípticas",
+                    statement: "Os planetas se movem em órbitas elípticas, com o Sol ocupando um dos focos da elipse.",
+                    explanation: "Antes de Kepler, acreditava-se que os corpos celestes se moviam em círculos perfeitos. Após analisar os dados de Tycho Brahe, especialmente sobre a órbita de Marte, Kepler descobriu que a única curva que correspondia perfeitamente aos dados observacionais era uma elipse.",
+                    importance: "Esta descoberta rompeu com 2.000 anos de tradição aristotélica que insistia na perfeição circular dos céus. Foi um passo crucial para a compreensão realista do sistema solar.",
+                    image: "assets/leis/first-law-ellipse.svg"
+                },
+                2: {
+                    title: "Segunda Lei de Kepler: Lei das Áreas Iguais",
+                    statement: "Uma linha reta ligando um planeta ao Sol varre áreas iguais em intervalos de tempo iguais.",
+                    explanation: "Esta lei descreve como a velocidade de um planeta varia ao longo de sua órbita. Quando o planeta está mais próximo do Sol (periélio), move-se mais rapidamente; quando está mais distante (afélio), move-se mais lentamente.",
+                    importance: "Mais tarde, descobriu-se que esta lei é uma consequência da conservação do momento angular, um princípio fundamental da física. Newton utilizaria esta lei como evidência para sua teoria da gravitação universal.",
+                    image: "assets/leis/second-law-areas.svg"
+                },
+                3: {
+                    title: "Terceira Lei de Kepler: Lei Harmônica",
+                    statement: "O quadrado do período orbital de um planeta é diretamente proporcional ao cubo do semi-eixo maior de sua órbita elíptica.",
+                    explanation: "Matematicamente expressa como P² = Ka³, onde P é o período orbital, a é o semi-eixo maior da elipse, e K é uma constante que depende da massa do corpo central. Esta lei estabelece uma relação matemática precisa entre o tempo que um planeta leva para orbitar o Sol e sua distância média ao Sol.",
+                    importance: "Esta lei permite comparar as órbitas de diferentes planetas e calcular suas distâncias relativas. É amplamente utilizada hoje para determinar órbitas de exoplanetas e para o planejamento de missões espaciais.",
+                    image: "assets/leis/third-law-graph.svg"
+                }
             };
+            
+            const law = laws[lawNumber];
+            if (!law) return;
 
-            alert(`Lei ${lawNumber} de Kepler:\n\n${laws[lawNumber]}`);
+            const modal = document.createElement('div');
+            modal.className = 'law-detail-modal';
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.background = 'rgba(10, 25, 47, 0.95)';
+            modal.style.padding = '30px';
+            modal.style.borderRadius = '10px';
+            modal.style.maxWidth = '800px';
+            modal.style.maxHeight = '80vh';
+            modal.style.overflow = 'auto';
+            modal.style.zIndex = '1000';
+            modal.style.boxShadow = '0 0 30px rgba(100, 255, 218, 0.2)';
+            
+            modal.innerHTML = `
+                <h3>${law.title}</h3>
+                <div class="law-visualization" style="text-align: center; margin: 20px 0;">
+                    <img src="${law.image}" alt="Lei ${lawNumber} de Kepler" style="max-width: 100%; border-radius: 5px;">
+                </div>
+                <p class="law-statement" style="font-weight: bold; font-style: italic; margin: 15px 0; font-size: 1.1em;">"${law.statement}"</p>
+                <h4>Explicação:</h4>
+                <p>${law.explanation}</p>
+                <h4>Importância:</h4>
+                <p>${law.importance}</p>
+                <button id="close-law-modal" style="margin-top: 20px; padding: 10px 20px; background: rgba(100, 255, 218, 0.1); color: #64ffda; border: 1px solid #64ffda; border-radius: 5px; cursor: pointer;">Fechar</button>
+            `;
+            
+            document.body.appendChild(modal);
+            document.getElementById('close-law-modal').addEventListener('click', () => modal.remove());
         }
 
+       
+        // Função para mostrar recursos para professores
+        function showResource(resourceId) {
+            const resource = teacherResources[resourceId];
+            if (!resource) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'resource-modal';
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.background = 'rgba(10, 25, 47, 0.95)';
+            modal.style.padding = '30px';
+            modal.style.borderRadius = '10px';
+            modal.style.maxWidth = '800px';
+            modal.style.maxHeight = '80vh';
+            modal.style.overflow = 'auto';
+            modal.style.zIndex = '1000';
+            modal.style.boxShadow = '0 0 30px rgba(100, 255, 218, 0.2)';
+            
+            modal.innerHTML = `
+                <h3>${resource.title}</h3>
+                <div class="resource-content">
+                    ${resource.content}
+                </div>
+                <button id="close-resource-modal" style="margin-top: 20px; padding: 10px 20px; background: rgba(100, 255, 218, 0.1); color: #64ffda; border: 1px solid #64ffda; border-radius: 5px; cursor: pointer;">Fechar</button>
+            `;
+            
+            document.body.appendChild(modal);
+            document.getElementById('close-resource-modal').addEventListener('click', () => modal.remove());
+            
+            // Adicionar manipuladores para links de download
+            const downloadLinks = modal.querySelectorAll('.download-link');
+            downloadLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert("Esta funcionalidade estaria conectada a um sistema de download de recursos para professores. Em uma implementação completa, este link baixaria o material pedagógico em formato PDF.");
+                });
+            });
+        }
+        
+        // Funções de demonstração para as leis de Kepler
+        function demonstrateEllipse() {
+            alert("Esta seria uma demonstração interativa de como construir uma elipse usando o método dos dois focos.");
+        }
+        
+        function demonstrateSecondLaw() {
+            alert("Esta seria uma demonstração animada da segunda lei de Kepler, mostrando como a velocidade orbital varia em diferentes pontos da órbita.");
+        }
+        
+        function demonstrateThirdLaw() {
+            alert("Esta seria uma calculadora interativa da terceira lei de Kepler, permitindo comparar diferentes planetas do sistema solar.");
+        }
+
+        // Função para iniciar experimentos virtuais
+        function startExperiment(type) {
+            const experiments = {
+                'ellipse': {
+                    title: "Construindo uma Elipse",
+                    description: "Neste experimento, você aprenderá a construir uma elipse usando o método dos dois focos, demonstrando visualmente a primeira lei de Kepler.",
+                    url: "kepler-simulator.html?experiment=ellipse"
+                },
+                'area': {
+                    title: "Lei das Áreas",
+                    description: "Observe como um planeta varre áreas iguais em tempos iguais, mesmo quando sua velocidade varia conforme sua distância do Sol.",
+                    url: "kepler-simulator.html?experiment=area"
+                },
+                'harmony': {
+                    title: "Lei Harmônica",
+                    description: "Compare o período orbital de diferentes planetas e verifique a relação P²∝a³ da terceira lei de Kepler.",
+                    url: "kepler-simulator.html?experiment=harmony"
+                },
+                'modern': {
+                    title: "Aplicações Modernas",
+                    description: "Descubra como as leis de Kepler são usadas hoje na detecção de exoplanetas e no planejamento de missões espaciais.",
+                    url: "kepler-simulator.html?experiment=modern"
+                }
+            };
+            
+            const experiment = experiments[type];
+            if (!experiment) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'experiment-modal';
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.background = 'rgba(10, 25, 47, 0.95)';
+            modal.style.padding = '30px';
+            modal.style.borderRadius = '10px';
+            modal.style.maxWidth = '600px';
+            modal.style.zIndex = '1000';
+            
+            modal.innerHTML = `
+                <h3>${experiment.title}</h3>
+                <p>${experiment.description}</p>
+                <div class="experiment-options" style="display: flex; justify-content: space-between; margin-top: 20px;">
+                    <button id="start-simulator" style="padding: 10px 20px; background: rgba(100, 255, 218, 0.1); color: #64ffda; border: 1px solid #64ffda; border-radius: 5px; cursor: pointer;">Iniciar Simulador</button>
+                    <button id="close-experiment-modal" style="padding: 10px 20px; background: rgba(255, 100, 100, 0.1); color: #ff6464; border: 1px solid #ff6464; border-radius: 5px; cursor: pointer;">Cancelar</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            document.getElementById('start-simulator').addEventListener('click', () => {
+                window.location.href = experiment.url;
+            });
+            
+            document.getElementById('close-experiment-modal').addEventListener('click', () => {
+                modal.remove();
+            });
+        }
+
+        // Funções do Quiz
         function checkAnswer(element, isCorrect) {
+            // Desabilitar todas as opções após uma resposta
+            const questionDiv = element.closest('.quiz-question');
+            const options = questionDiv.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            const questionId = questionDiv.id.split('-')[1];
+            
             if (isCorrect) {
                 element.classList.add('correct');
+                score++;
+                updateScore();
             } else {
                 element.classList.add('wrong');
+                // Mostrar a resposta correta
+                const correctOption = questionDiv.querySelector('[data-correct="true"]');
+                correctOption.classList.add('correct');
             }
+            
+            // Mostrar explicação
+            const explanation = document.getElementById(`explanation-${questionId}`);
+            if (explanation) {
+                explanation.style.display = 'block';
+            }
+            
+            // Mostrar botão para próxima pergunta
+            const nextButton = questionDiv.querySelector(`.next-question`) || questionDiv.querySelector(`.quiz-finish`);
+            if (nextButton) {
+                nextButton.style.display = 'block';
+            }
+        }
+        
+        function nextQuestion(currentNum) {
+            const current = document.getElementById(`question-${currentNum}`);
+            current.style.display = 'none';
+            
+            const next = document.getElementById(`question-${currentNum + 1}`);
+            next.style.display = 'block';
+            
+            currentQuestion = currentNum + 1;
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const progressFill = document.querySelector('.progress-fill');
+            const questionNumber = document.getElementById('question-number');
+            
+            progressFill.style.width = `${(currentQuestion / totalQuestions) * 100}%`;
+            questionNumber.textContent = `Pergunta ${currentQuestion}/${totalQuestions}`;
+        }
+        
+        function updateScore() {
+            const scoreElement = document.getElementById('score');
+            scoreElement.textContent = `Pontuação: ${score}`;
+        }
+        
+        function finishQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            const questions = quizContainer.querySelectorAll('.quiz-question');
+            questions.forEach(q => q.style.display = 'none');
+            
+            const result = document.getElementById('quiz-result');
+            result.style.display = 'block';
+            
+            const finalScore = document.getElementById('final-score');
+            finalScore.textContent = score;
+            
+            const resultMessage = document.getElementById('result-message');
+            if (score === totalQuestions) {
+                resultMessage.innerHTML = '<p>Parabéns! Você acertou todas as perguntas! Você demonstra um excelente conhecimento sobre as leis de Kepler e sua importância histórica.</p>';
+            } else if (score >= totalQuestions * 0.8) {
+                resultMessage.innerHTML = '<p>Muito bom! Você demonstra um bom entendimento das leis de Kepler.</p>';
+            } else if (score >= totalQuestions * 0.6) {
+                resultMessage.innerHTML = '<p>Bom trabalho! Você conhece os conceitos básicos, mas poderia revisar alguns detalhes.</p>';
+            } else {
+                resultMessage.innerHTML = '<p>Você pode melhorar! Sugerimos revisar o material sobre as leis de Kepler e tentar novamente.</p>';
+            }
+        }
+        
+        function restartQuiz() {
+            // Resetar estado do quiz
+            currentQuestion = 1;
+            score = 0;
+            
+            // Resetar UI
+            updateScore();
+            updateProgress();
+            
+            // Esconder resultado
+            document.getElementById('quiz-result').style.display = 'none';
+            
+            // Mostrar primeira pergunta e resetar todas as perguntas
+            const questions = document.querySelectorAll('.quiz-question');
+            questions.forEach((q, i) => {
+                if (i === 0) {
+                    q.style.display = 'block';
+                } else {
+                    q.style.display = 'none';
+                }
+                
+                // Resetar opções
+                const options = q.querySelectorAll('.quiz-option');
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'wrong');
+                    opt.style.pointerEvents = 'auto';
+                });
+                
+                // Esconder explicações
+                const questionId = q.id.split('-')[1];
+                const explanation = document.getElementById(`explanation-${questionId}`);
+                if (explanation) explanation.style.display = 'none';
+                
+                // Esconder botões de próxima
+                const nextButton = q.querySelector('.next-question') || q.querySelector('.quiz-finish');
+                if (nextButton) nextButton.style.display = 'none';
+            });
         }
 
         // Animação da linha do tempo
@@ -506,62 +1750,69 @@
             });
         }
 
-        window.addEventListener('scroll', checkTimelineItems);
-        window.addEventListener('load', checkTimelineItems);
-
-        // Adicionar galeria 3D
-        function createGallery() {
-            const images = [
-                'kepler.jpg',
-                'tycho.jpg',
-                'prague.jpg',
-                'rudolphine.jpg',
-                'astronomia-nova.jpg'
-            ];
-
-            const container = document.querySelector('.gallery-container');
-            const angleStep = (2 * Math.PI) / images.length;
-
-            images.forEach((img, index) => {
-                const item = document.createElement('div');
-                item.className = 'gallery-item';
-                item.style.transform = `rotateY(${index * angleStep}rad) translateZ(300px)`;
-                item.innerHTML = `<img src="images/${img}" alt="Historical image">`;
-                container.appendChild(item);
-            });
-        }
-
-        // Adicionar pontos no mapa
-        function createMapPoints() {
-            const points = [
-                { x: 30, y: 40, title: 'Weil der Stadt - Nascimento de Kepler' },
-                { x: 45, y: 35, title: 'Praga - Trabalho com Tycho Brahe' },
-                { x: 40, y: 50, title: 'Graz - Primeiras Teorias' }
-            ];
-
-            const map = document.querySelector('.interactive-map');
-            points.forEach(point => {
-                const dot = document.createElement('div');
-                dot.className = 'map-point';
-                dot.style.left = `${point.x}%`;
-                dot.style.top = `${point.y}%`;
-                dot.setAttribute('data-title', point.title);
-                dot.onclick = () => showMapInfo(point);
-                map.appendChild(dot);
-            });
-        }
-
-        // Função para experimentos virtuais
-        function startExperiment(type) {
-            // Implementar experimentos interativos aqui
-            console.log(`Starting experiment: ${type}`);
-        }
-
         // Inicialização
         window.addEventListener('load', () => {
-            createGallery();
-            createMapPoints();
-            // ...existing initialization code...
+            // Inicializar quiz
+            updateScore();
+            updateProgress();
+            
+            // Animar linha do tempo ao carregar e ao rolar
+            checkTimelineItems();
+            window.addEventListener('scroll', checkTimelineItems);
+            
+                        // Preparar galeria de imagens para demonstração
+            if (document.querySelector('.gallery-container')) {
+                const galleryImages = [
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Portrait_Confused_With_Johannes_Kepler_1610.jpg/300px-Portrait_Confused_With_Johannes_Kepler_1610.jpg',
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Tycho_Brahe.JPG/300px-Tycho_Brahe.JPG',
+                    'assets/sistemas/mars-orbit.svg',
+                    'assets/sistemas/ptolemaic-system.svg',
+                    'assets/obras/astronomia-nova-cover.svg'
+                ];
+                
+                const container = document.querySelector('.gallery-container');
+                const angleStep = (2 * Math.PI) / galleryImages.length;
+                
+                galleryImages.forEach((img, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.style.transform = `rotateY(${index * angleStep}rad) translateZ(300px)`;
+                    item.innerHTML = `<img src="${img}" alt="Historical image">`;
+                    container.appendChild(item);
+                });
+            }
+              // Preparar pontos no mapa interativo
+            if (document.querySelector('.interactive-map')) {
+                const mapImage = document.createElement('img');
+
+                mapImage.style.width = '100%';
+                mapImage.style.height = '100%';
+                mapImage.style.objectFit = 'cover';
+                mapImage.style.borderRadius = '10px';
+                document.querySelector('.interactive-map').appendChild(mapImage);
+                
+                const points = [
+                    { x: 30, y: 65, title: 'Weil der Stadt - Nascimento de Kepler', info: 'Cidade natal de Kepler, onde nasceu em 27 de dezembro de 1571.' },
+                    { x: 48, y: 40, title: 'Praga - Trabalho com Tycho Brahe', info: 'Em Praga, Kepler trabalhou com Tycho Brahe e depois como matemático imperial para Rodolfo II.' },
+                    { x: 52, y: 65, title: 'Graz - Primeiras Teorias', info: 'Kepler foi professor de matemática em Graz, onde começou a desenvolver suas teorias astronômicas.' },
+                    { x: 35, y: 55, title: 'Linz - Desenvolvimento da Terceira Lei', info: 'Kepler viveu em Linz por 14 anos, onde publicou Harmonices Mundi contendo sua terceira lei.' },
+                    { x: 27, y: 45, title: 'Regensburg - Local de Falecimento', info: 'Kepler faleceu em Regensburg em 15 de novembro de 1630, durante uma viagem.' }
+                ];
+                
+                const mapElement = document.querySelector('.interactive-map');
+                points.forEach(point => {
+                    const dot = document.createElement('div');
+                    dot.className = 'map-point';
+                    dot.style.left = `${point.x}%`;
+                    dot.style.top = `${point.y}%`;
+                    dot.setAttribute('data-title', point.title);
+                    dot.setAttribute('data-info', point.info);
+                    dot.onclick = () => {
+                        alert(`${point.title}\n\n${point.info}`);
+                    };
+                    mapElement.appendChild(dot);
+                });
+            }
         });
     </script>
 </body>
