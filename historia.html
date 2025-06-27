@@ -664,11 +664,161 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* Estilos para a seção de exercícios sugeridos */
+        .teacher-exercises {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .exercise-category {
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+        
+        .exercise-category h3 {
+            color: #64ffda;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .exercise-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #64ffda;
+            transition: all 0.3s ease;
+        }
+        
+        .exercise-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .exercise-item h4 {
+            color: #64ffda;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .exercise-item p {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        
+        .exercise-materials {
+            background: rgba(100, 255, 218, 0.05);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .evaluation-guide {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .rubric-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+        
+        .rubric-item h4 {
+            color: #64ffda;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .rubric-item ul {
+            padding-left: 20px;
+        }
+        
+        .rubric-item li {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+        
+        .additional-resources {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .resource-link {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+        
+        .resource-link h4 {
+            color: #64ffda;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .resource-link ul {
+            padding-left: 20px;
+        }
+        
+        .resource-link li {
+            margin: 8px 0;
+        }
+        
+        .resource-link a {
+            color: #64ffda;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .resource-link a:hover {
+            color: #72ffda;
+            text-decoration: underline;
+        }
+        
+        /* Responsividade para dispositivos móveis */
+        @media (max-width: 768px) {
+            .teacher-exercises {
+                padding: 10px;
+            }
+            
+            .exercise-category {
+                padding: 20px;
+            }
+            
+            .exercises-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .evaluation-guide, .additional-resources {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="navigation">
-        <a href="index.html" class="nav-button">Simulador</a>
         <a href="experimentos.html" class="nav-button">Experimentos</a>
     </div>    <div class="parallax-header">
         <div class="header-content">
@@ -902,19 +1052,16 @@
         <div class="legacy-item">
             <h3>Base da Física Moderna</h3>
             <p>As leis de Kepler forneceram evidências cruciais para a teoria da gravitação universal de Isaac Newton. Newton mostrou que as três leis de Kepler podiam ser derivadas de princípios físicos fundamentais, unificando a física terrestre e celeste pela primeira vez na história.</p>
-            <img src="assets/modernas/universal-gravitation.svg" alt="Gravitação Universal" class="legacy-image">
         </div>
         
         <div class="legacy-item">
             <h3>Exploração Espacial</h3>
             <p>As leis de Kepler são fundamentais para o planejamento de missões espaciais modernas. Engenheiros da NASA e de outras agências espaciais usam estas leis para calcular trajetórias precisas para sondas interplanetárias, economizando combustível e otimizando missões.</p>
-            <img src="assets/modernas/space-trajectories.svg" alt="Trajetórias Espaciais" class="legacy-image">
         </div>
         
         <div class="legacy-item">
             <h3>Descoberta de Exoplanetas</h3>
             <p>O método da velocidade radial para detecção de exoplanetas baseia-se na terceira lei de Kepler. Quando uma estrela oscila devido à presença de um planeta, cientistas podem calcular a massa e a órbita do planeta usando os princípios estabelecidos por Kepler.</p>
-            <img src="assets/modernas/exoplanet-detection.svg" alt="Detecção de Exoplanetas" class="legacy-image">
         </div>
         
         <div class="legacy-item">
@@ -1085,7 +1232,198 @@
                 <button class="restart-quiz" onclick="restartQuiz()">Recomeçar Quiz</button>
             </div>
         </div>
-    </div>    <script>
+    </div>
+
+    <h2 class="section-title">Exercícios para Ensino Médio</h2>
+    
+    <div class="teacher-exercises">
+        <div class="exercise-category">
+            <h3>Cálculos com a Terceira Lei de Kepler</h3>
+            <div class="exercises-grid">
+                <div class="exercise-item">
+                    <h4>Exercício 1: Período de Marte</h4>
+                    <p><strong>Enunciado:</strong> Sabendo que Marte está a 1,52 UA do Sol, calcule seu período orbital em anos.</p>
+                    <p><strong>Dados:</strong> Terra: 1 UA, 1 ano | Fórmula: T² = a³</p>
+                    <div class="exercise-solution">
+                        <strong>Resolução:</strong><br>
+                        T² = (1,52)³ = 3,51<br>
+                        T = √3,51 = 1,87 anos ≈ 687 dias
+                    </div>
+                </div>
+                
+                <div class="exercise-item">
+                    <h4>Exercício 2: Distância de Júpiter</h4>
+                    <p><strong>Enunciado:</strong> Júpiter tem período orbital de 11,86 anos. Qual sua distância média do Sol?</p>
+                    <p><strong>Dados:</strong> Terra: 1 UA, 1 ano | Fórmula: T² = a³</p>
+                    <div class="exercise-solution">
+                        <strong>Resolução:</strong><br>
+                        (11,86)² = a³<br>
+                        140,7 = a³<br>
+                        a = ∛140,7 = 5,20 UA
+                    </div>
+                </div>
+                
+                <div class="exercise-item">
+                    <h4>Exercício 3: Satélite Geoestacionário</h4>
+                    <p><strong>Enunciado:</strong> Um satélite geoestacionário orbita a Terra em 24 horas a 35.786 km de altitude. Se um satélite orbitar a 20.000 km de altitude, qual será seu período?</p>
+                    <p><strong>Dados:</strong> Raio da Terra = 6.378 km</p>
+                    <div class="exercise-solution">
+                        <strong>Resolução:</strong><br>
+                        r₁ = 42.164 km, r₂ = 26.378 km<br>
+                        T₂ = T₁ × (r₂/r₁)^(3/2) = 24 × (26.378/42.164)^1,5<br>
+                        T₂ ≈ 12,3 horas
+                    </div>
+                </div>
+                
+                <div class="exercise-item">
+                    <h4>Exercício 4: Exoplaneta</h4>
+                    <p><strong>Enunciado:</strong> Um exoplaneta orbita sua estrela em 50 dias terrestres a uma distância de 0,3 UA. Compare com a órbita da Terra ao redor do Sol.</p>
+                    <p><strong>Pergunta:</strong> A relação T²/a³ é a mesma para ambos os sistemas?</p>
+                    <div class="exercise-solution">
+                        <strong>Resolução:</strong><br>
+                        Terra: T²/a³ = 1²/1³ = 1<br>
+                        Exoplaneta: T²/a³ = (50/365)²/(0,3)³ = 0,69<br>
+                        <strong>Não!</strong> A estrela tem massa diferente do Sol.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="exercise-category">
+            <h3>Questões Conceituais das Três Leis</h3>
+            <div class="exercises-grid">
+                <div class="exercise-item">
+                    <h4>Primeira Lei: Órbitas Elípticas</h4>
+                    <div class="exercise-questions">
+                        <p><strong>1.</strong> Por que as órbitas são elípticas e não circulares?</p>
+                        <p><strong>2.</strong> O que aconteceria se o Sol estivesse no centro da elipse?</p>
+                        <p><strong>3.</strong> Como a excentricidade afeta a forma da órbita?</p>
+                        <p><strong>4.</strong> Qual planeta tem a órbita mais circular? E a mais elíptica?</p>
+                    </div>
+                    <div class="exercise-answer">
+                        <strong>Respostas:</strong><br>
+                        1. Resultado da velocidade inicial + gravidade<br>
+                        2. Não seria uma órbita estável<br>
+                        3. Maior excentricidade = órbita mais "achatada"<br>
+                        4. Vênus (mais circular), Mercúrio (mais elíptica)
+                    </div>
+                </div>
+                
+                <div class="exercise-item">
+                    <h4>Segunda Lei: Velocidade Orbital</h4>
+                    <div class="exercise-questions">
+                        <p><strong>1.</strong> Quando um cometa está mais rápido: no periélio ou afélio?</p>
+                        <p><strong>2.</strong> Por que a velocidade varia ao longo da órbita?</p>
+                        <p><strong>3.</strong> A Terra se move mais rápido em janeiro ou julho?</p>
+                        <p><strong>4.</strong> O que é conservado durante o movimento orbital?</p>
+                    </div>
+                    <div class="exercise-answer">
+                        <strong>Respostas:</strong><br>
+                        1. No periélio (mais próximo do Sol)<br>
+                        2. Para conservar o momento angular<br>
+                        3. Janeiro (Terra mais próxima do Sol)<br>
+                        4. Momento angular (L = r × mv)
+                    </div>
+                </div>
+                
+                <div class="exercise-item">
+                    <h4>Terceira Lei: Relações Período-Distância</h4>
+                    <div class="exercise-questions">
+                        <p><strong>1.</strong> Por que planetas mais distantes têm períodos maiores?</p>
+                        <p><strong>2.</strong> Como usar a 3ª lei para descobrir exoplanetas?</p>
+                        <p><strong>3.</strong> A relação T²=a³ vale para luas também?</p>
+                        <p><strong>4.</strong> Por que a constante da 3ª lei depende da massa central?</p>
+                    </div>
+                    <div class="exercise-answer">
+                        <strong>Respostas:</strong><br>
+                        1. Maior distância = menor velocidade orbital<br>
+                        2. Observando oscilações da estrela hospedeira<br>
+                        3. Sim, considerando o planeta como centro<br>
+                        4. Força gravitacional depende da massa do Sol
+                    </div>
+                </div>
+                
+                <div class="exercise-item">
+                    <h4>Aplicações Modernas</h4>
+                    <div class="exercise-questions">
+                        <p><strong>1.</strong> Como as leis de Kepler ajudam no lançamento de satélites?</p>
+                        <p><strong>2.</strong> Por que o GPS precisa considerar as leis de Kepler?</p>
+                        <p><strong>3.</strong> Como descobrimos a massa de planetas distantes?</p>
+                        <p><strong>4.</strong> Missões espaciais usam órbitas elípticas?</p>
+                    </div>
+                    <div class="exercise-answer">
+                        <strong>Respostas:</strong><br>
+                        1. Calculam trajetórias e velocidades necessárias<br>
+                        2. Satélites GPS seguem órbitas keplerianas<br>
+                        3. Observando as órbitas de suas luas<br>
+                        4. Sim, órbitas de transferência são elípticas
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="exercise-category">
+            <h3>Lista de Exercícios para Casa</h3>
+            <div class="homework-list">
+                <div class="homework-item">
+                    <h4>Problemas Numéricos (3ª Lei)</h4>
+                    <ol>
+                        <li>Vênus orbita o Sol a 0,72 UA. Calcule seu período orbital.</li>
+                        <li>Netuno tem período de 165 anos. Qual sua distância do Sol?</li>
+                        <li>A Lua orbita a Terra em 27,3 dias a 384.400 km. Se um satélite orbitar a 400 km de altitude, qual seu período? (Raio da Terra = 6.378 km)</li>
+                        <li>Compare o período orbital de Fobos (lua de Marte) que orbita a 9.376 km do centro de Marte, com nossa Lua.</li>
+                    </ol>
+                </div>
+                
+                <div class="homework-item">
+                    <h4>Questões Dissertativas</h4>
+                    <ol>
+                        <li>Explique como Kepler chegou à conclusão de que as órbitas são elípticas.</li>
+                        <li>Descreva a importância dos dados de Tycho Brahe para as descobertas de Kepler.</li>
+                        <li>Como a segunda lei de Kepler explica as estações do ano na Terra?</li>
+                        <li>Relacione as leis de Kepler com a exploração espacial moderna.</li>
+                        <li>Por que as leis de Kepler foram fundamentais para Newton desenvolver a lei da gravitação universal?</li>
+                    </ol>
+                </div>
+                
+                <div class="homework-item">
+                    <h4>Pesquisa (Opcional)</h4>
+                    <ul>
+                        <li>Pesquise sobre um exoplaneta descoberto recentemente e calcule suas características orbitais.</li>
+                        <li>Investigue como o telescópio James Webb usa as leis de Kepler em sua órbita.</li>
+                        <li>Compare as órbitas dos planetas do Sistema Solar em termos de excentricidade.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="exercise-category">
+            <h3>Gabarito Rápido (Para o Professor)</h3>
+            <div class="answer-key">
+                <div class="answer-section">
+                    <h4>Respostas dos Problemas Numéricos:</h4>
+                    <ul>
+                        <li><strong>Vênus:</strong> T = 0,61 anos ≈ 225 dias</li>
+                        <li><strong>Netuno:</strong> a = 30,1 UA</li>
+                        <li><strong>Satélite 400km:</strong> T ≈ 1,5 horas</li>
+                        <li><strong>Fobos:</strong> T ≈ 7,6 horas (muito mais rápido que nossa Lua)</li>
+                    </ul>
+                </div>
+                
+                <div class="answer-section">
+                    <h4>Conceitos-Chave para Avaliar:</h4>
+                    <ul>
+                        <li>Compreensão de que órbitas são elípticas, não circulares</li>
+                        <li>Relação entre velocidade e distância do Sol</li>
+                        <li>Aplicação correta da fórmula T² = a³</li>
+                        <li>Conexão com aplicações tecnológicas modernas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
         // Estado do Quiz
         let currentQuestion = 1;
         let score = 0;

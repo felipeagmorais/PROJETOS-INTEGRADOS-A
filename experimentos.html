@@ -78,7 +78,7 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 30px;
             border-radius: 15px;
-            min-height: 600px;
+            min-height: 700px; /* Aumentado de 600px para 700px */
         }
 
         .experiment-content.active {
@@ -100,7 +100,7 @@
 
         .canvas-container {
             flex: 1;
-            min-height: 500px;
+            min-height: 600px; /* Aumentado de 500px para 600px */
             position: relative;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
@@ -197,12 +197,52 @@
             margin: 15px auto;
             max-width: 600px;
         }
+
+        .planet-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .planet-btn {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: #64ffda;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .planet-btn:hover {
+            background: rgba(100, 255, 218, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .planet-btn.active {
+            background: rgba(100, 255, 218, 0.3);
+            border-color: #64ffda;
+        }
+
+        .planet-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .planet-info .parameter-box {
+            margin: 8px 0;
+            padding: 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="navigation">
-        <a href="index.html" class="nav-button">Simulador</a>
-        <a href="historia.html" class="nav-button">História</a>
+        <a href="historia.html" class="nav-button">← Voltar ao Início</a>
     </div>
 
     <div class="experiments-container">
@@ -313,18 +353,50 @@
                 <div class="instructions">
                     <h3>Terceira Lei de Kepler</h3>
                     <p>O quadrado do período orbital é proporcional ao cubo do semi-eixo maior.</p>
+                    <p><strong>Fórmula:</strong> T² = a³ (em unidades astronômicas e anos)</p>
                 </div>
                 
                 <div class="controls">
+                    <h4>Planetas do Sistema Solar:</h4>
+                    <div class="planet-buttons">
+                        <button class="planet-btn" onclick="setPlanet('mercurio')">Mercúrio</button>
+                        <button class="planet-btn" onclick="setPlanet('venus')">Vênus</button>
+                        <button class="planet-btn" onclick="setPlanet('terra')">Terra</button>
+                        <button class="planet-btn" onclick="setPlanet('marte')">Marte</button>
+                        <button class="planet-btn" onclick="setPlanet('jupiter')">Júpiter</button>
+                        <button class="planet-btn" onclick="setPlanet('saturno')">Saturno</button>
+                        <button class="planet-btn" onclick="setPlanet('urano')">Urano</button>
+                        <button class="planet-btn" onclick="setPlanet('netuno')">Netuno</button>
+                    </div>
+                    
                     <label for="axis3">Semi-eixo maior (U.A.):</label>
                     <div class="slider-container">
-                        <span>0.5</span>
-                        <input id="axis3" type="range" min="0.5" max="5" value="1" step="0.1">
-                        <span>5.0</span>
+                        <span>0.4</span>
+                        <input id="axis3" type="range" min="0.4" max="30" value="1" step="0.1">
+                        <span>30.0</span>
                     </div>
                     <div class="parameter-box">
                         <div>Valor atual:</div>
                         <div id="axisValue3">1.0</div>
+                    </div>
+                    
+                    <div class="planet-info">
+                        <div class="parameter-box">
+                            <div>Planeta selecionado:</div>
+                            <div id="planetName">Terra</div>
+                        </div>
+                        <div class="parameter-box">
+                            <div>Período real:</div>
+                            <div id="realPeriod">1.0 anos</div>
+                        </div>
+                        <div class="parameter-box">
+                            <div>Período calculado:</div>
+                            <div id="calculatedPeriod">1.0 anos</div>
+                        </div>
+                        <div class="parameter-box">
+                            <div>Diferença:</div>
+                            <div id="periodDifference">0.0%</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -351,7 +423,7 @@
         let nextSectorTime = Date.now();
         let showSecondLaw = false;
         let startTime = Date.now();
-        let scale = 60;
+        let scale = 120; // Aumentado de 60 para 120 para dobrar o tamanho das órbitas
 
         function generateStars(count, canvas) {
             stars.length = 0;
@@ -789,6 +861,46 @@
             animate();
         }
 
+        // Dados dos planetas do Sistema Solar
+        const planetsData = {
+            mercurio: { name: 'Mercúrio', distance: 0.39, period: 0.24, color: '#8C7853' },
+            venus: { name: 'Vênus', distance: 0.72, period: 0.62, color: '#FFC649' },
+            terra: { name: 'Terra', distance: 1.00, period: 1.00, color: '#6B93D6' },
+            marte: { name: 'Marte', distance: 1.52, period: 1.88, color: '#CD5C5C' },
+            jupiter: { name: 'Júpiter', distance: 5.20, period: 11.86, color: '#D8CA9D' },
+            saturno: { name: 'Saturno', distance: 9.54, period: 29.46, color: '#FAD5A5' },
+            urano: { name: 'Urano', distance: 19.19, period: 84.01, color: '#4FD0E7' },
+            netuno: { name: 'Netuno', distance: 30.07, period: 164.8, color: '#4B70DD' }
+        };
+
+        let currentPlanet = 'terra';
+
+        function setPlanet(planetKey) {
+            currentPlanet = planetKey;
+            const planet = planetsData[planetKey];
+            
+            // Atualizar o slider
+            const axis3 = document.getElementById('axis3');
+            axis3.value = planet.distance;
+            document.getElementById('axisValue3').textContent = planet.distance.toFixed(2);
+            
+            // Atualizar informações do planeta
+            document.getElementById('planetName').textContent = planet.name;
+            document.getElementById('realPeriod').textContent = `${planet.period.toFixed(2)} anos`;
+            
+            // Calcular período usando a terceira lei
+            const calculatedPeriod = Math.sqrt(Math.pow(planet.distance, 3));
+            document.getElementById('calculatedPeriod').textContent = `${calculatedPeriod.toFixed(2)} anos`;
+            
+            // Calcular diferença percentual
+            const difference = Math.abs((calculatedPeriod - planet.period) / planet.period * 100);
+            document.getElementById('periodDifference').textContent = `${difference.toFixed(1)}%`;
+            
+            // Atualizar botões ativos
+            document.querySelectorAll('.planet-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="setPlanet('${planetKey}')"]`).classList.add('active');
+        }
+
         function setupPeriodExperiment() {
             const canvas = document.getElementById('period-canvas');
             canvas.width = canvas.offsetWidth;
@@ -796,14 +908,109 @@
             const ctx = canvas.getContext('2d');
             generateStars(100, canvas);
             
+            // Configurar listeners para o slider
+            const axis3 = document.getElementById('axis3');
+            const axisValue3 = document.getElementById('axisValue3');
+            
+            axis3.addEventListener('input', function() {
+                const a = parseFloat(this.value);
+                axisValue3.textContent = a.toFixed(2);
+                
+                // Atualizar cálculos
+                const calculatedPeriod = Math.sqrt(Math.pow(a, 3));
+                document.getElementById('calculatedPeriod').textContent = `${calculatedPeriod.toFixed(2)} anos`;
+                
+                // Se há um planeta selecionado, calcular diferença
+                if (currentPlanet) {
+                    const planet = planetsData[currentPlanet];
+                    const difference = Math.abs((calculatedPeriod - planet.period) / planet.period * 100);
+                    document.getElementById('periodDifference').textContent = `${difference.toFixed(1)}%`;
+                }
+            });
+            
+            // Inicializar com a Terra
+            setPlanet('terra');
+            
             function animate() {
-                const a = parseFloat(document.getElementById('axis3').value);
+                const a = parseFloat(axis3.value);
                 const T = Math.sqrt(a ** 3);
-                drawOrbitWithPeriod(ctx, canvas, a, 0.5, T);
+                const planet = planetsData[currentPlanet];
+                
+                // Limpar canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Desenhar estrelas de fundo
+                for (const star of stars) {
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                    ctx.fill();
+                }
+                
+                // Desenhar órbita
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const maxRadius = Math.min(canvas.width, canvas.height) / 2.5; // Aumentado de /3 para /2.5
+                const orbitRadius = Math.min((a / 10) * maxRadius, maxRadius * 0.9); // Melhor escala para planetas próximos
+                
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.arc(centerX, centerY, orbitRadius, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Desenhar Sol
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+                ctx.fillStyle = 'yellow';
+                ctx.fill();
+                
+                // Glow do Sol
+                const gradient = ctx.createRadialGradient(
+                    centerX, centerY, 8,
+                    centerX, centerY, 16
+                );
+                gradient.addColorStop(0, 'rgba(255, 255, 150, 0.8)');
+                gradient.addColorStop(1, 'rgba(255, 255, 150, 0)');
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 16, 0, 2 * Math.PI);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                // Desenhar planeta com cor específica
+                const elapsedTime = (Date.now() - startTime) / 1000;
+                const angle = (elapsedTime / T) * 2 * Math.PI;
+                const planetX = centerX + orbitRadius * Math.cos(angle);
+                const planetY = centerY + orbitRadius * Math.sin(angle);
+                
+                ctx.beginPath();
+                ctx.arc(planetX, planetY, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = planet.color;
+                ctx.fill();
+                
+                // Informações na tela
+                ctx.fillStyle = '#64ffda';
+                ctx.font = '16px Poppins';
+                ctx.fillText(`${planet.name}`, 20, 30);
+                ctx.fillText(`Distância: ${a.toFixed(2)} UA`, 20, 55);
+                ctx.fillText(`Período: ${T.toFixed(2)} anos`, 20, 80);
+                
+                // Mostrar comparação se não for o valor real
+                if (Math.abs(a - planet.distance) > 0.1) {
+                    ctx.fillStyle = '#ff6b6b';
+                    ctx.font = '14px Poppins';
+                    ctx.fillText(`Real: ${planet.distance} UA, ${planet.period.toFixed(2)} anos`, 20, 105);
+                }
+                
                 document.getElementById('periodOutput').innerHTML = `
-                    <div>Período orbital:</div>
+                    <div>Período calculado:</div>
                     <div>${T.toFixed(2)} anos</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">
+                        T² = ${T.toFixed(2)}² = ${(T*T).toFixed(1)}<br>
+                        a³ = ${a.toFixed(2)}³ = ${(a*a*a).toFixed(1)}
+                    </div>
                 `;
+                
                 animationId = requestAnimationFrame(animate);
             }
             
