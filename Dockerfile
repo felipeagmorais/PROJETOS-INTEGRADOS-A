@@ -13,8 +13,12 @@ COPY js/ /usr/share/nginx/html/js/
 # Copiar assets (imagens, SVGs, etc.)
 COPY assets/ /usr/share/nginx/html/assets/
 
-# Copiar configuração customizada do Nginx
-COPY default.conf /etc/nginx/conf.d/default.conf
+# Copiar script de inicialização
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Expor a porta 80 (padrão do Nginx)
-EXPOSE 80
+# Expor a porta (Railway usa variável PORT)
+EXPOSE $PORT
+
+# Usar o script de inicialização
+CMD ["/start.sh"]
